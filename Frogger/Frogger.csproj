@@ -124,6 +124,7 @@
     <Compile Include="Controller\GameManager.cs" />
     <Compile Include="Controller\LaneManager.cs" />
     <Compile Include="Controller\PlayerManager.cs" />
+    <Compile Include="Controller\SoundEffects.cs" />
     <Compile Include="Controller\VehicleManager.cs" />
     <Compile Include="Model\Frog.cs" />
     <Compile Include="Model\GameObject.cs" />
@@ -172,6 +173,11 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Sounds\frogger-homeLanding-sound.wav" />
+    <Content Include="Sounds\frogger-levelUp-sound.wav" />
+    <Content Include="Sounds\frogger-dying-sound.wav" />
+    <Content Include="Sounds\frogger-gameOver-sound.wav" />
+    <Content Include="Sounds\frogger-powerUp-sound.wav" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -216,6 +222,7 @@
       <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

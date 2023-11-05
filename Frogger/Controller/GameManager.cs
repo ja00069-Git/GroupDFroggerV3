@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -19,6 +20,7 @@ namespace Frogger.Controller
         private DispatcherTimer lifeDispatcherTimer;
         private readonly LaneManager laneManager;
         private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
+        private readonly SoundEffects soundEffects;
 
         #endregion
 
@@ -80,6 +82,7 @@ namespace Frogger.Controller
             this.setupLifeTimer();
             this.PlayerManager = new PlayerManager();
             this.laneManager = new LaneManager();
+            this.soundEffects = new SoundEffects();
         }
 
         #endregion
@@ -193,8 +196,9 @@ namespace Frogger.Controller
             }
         }
 
-        private void handleCollision()
+        private async void handleCollision()
         {
+            await this.soundEffects.DyingSound();
             this.Lives--;
             this.onLivesUpdated();
             this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
@@ -239,8 +243,9 @@ namespace Frogger.Controller
             this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
         }
 
-        private void handleLandingHome()
+        private async void handleLandingHome()
         {
+            await this.soundEffects.LandingHomeSounds();
             var increaseScoreBy = this.TimeCountDown;
             this.Score += increaseScoreBy;
             this.onScoreUpdated();
@@ -248,35 +253,38 @@ namespace Frogger.Controller
             this.TimeCountDown = 20;
         }
 
-        private void onScoreUpdated()
+        private async void onScoreUpdated()
         {
             this.ScoreUpdated?.Invoke(this, EventArgs.Empty);
 
             if (this.homeLandingSpots.All(spot => spot.PodOccupied))
             {
+                await this.soundEffects.LevelUpSound();
                 this.GameOver?.Invoke(this, EventArgs.Empty);
                 this.timer.Stop();
                 this.lifeDispatcherTimer.Stop();
             }
         }
 
-        private void onLivesUpdated()
+        private async void onLivesUpdated()
         {
             this.LivesUpdated?.Invoke(this, EventArgs.Empty);
 
             if (this.Lives == 0)
             {
+                await this.soundEffects.GameOverSound();
                 this.GameOver?.Invoke(this, EventArgs.Empty);
                 this.timer.Stop();
                 this.lifeDispatcherTimer.Stop();
             }
         }
 
-        private void onTimeOutChanged()
+        private async void onTimeOutChanged()
         {
             this.TimeOut?.Invoke(this, EventArgs.Empty);
             if (this.TimeCountDown == 0)
             {
+                await this.soundEffects.DyingSound();
                 this.TimeCountDown = 20;
                 this.Lives--;
                 this.onLivesUpdated();
