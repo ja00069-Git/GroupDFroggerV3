@@ -23,6 +23,57 @@ namespace Frogger.View
 
         #endregion
 
+        #region Properties        
+        /// <summary>
+        /// Gets or sets the lives.
+        /// </summary>
+        /// <value>
+        /// The lives.
+        /// </value>
+        public int Lives
+        {
+            get => int.TryParse(this.lives.Text, out var livesRemaining) ? livesRemaining : 0;
+            set => this.lives.Text = value.ToString();
+        }
+
+        /// <summary>
+        /// Gets or sets the score.
+        /// </summary>
+        /// <value>
+        /// The score.
+        /// </value>
+        public int Score
+        {
+            get => int.TryParse(this.score.Text, out var currentScore) ? currentScore : 0;
+            set => this.score.Text = value.ToString();
+        }
+
+        /// <summary>
+        /// Gets or sets the timer.
+        /// </summary>
+        /// <value>
+        /// The timer.
+        /// </value>
+        public int Timer
+        {
+            get => int.TryParse(this.timerTexBlock.Text, out var currentTimer) ? currentTimer : 0;
+            set => this.timerTexBlock.Text = value.ToString();
+        }
+
+        /// <summary>
+        /// Gets or sets the level.
+        /// </summary>
+        /// <value>
+        /// The level.
+        /// </value>
+        public int Level
+        {
+            get => int.TryParse(this.level.Text, out var currLevel) ? currLevel : 0;
+            set => this.level.Text = value.ToString();
+        }
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -33,30 +84,38 @@ namespace Frogger.View
             this.InitializeComponent();
 
             ApplicationView.PreferredLaunchViewSize = new Size
-                { Width = this.applicationWidth, Height = this.applicationHeight };
+            { Width = this.applicationWidth, Height = this.applicationHeight };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView()
                 .SetPreferredMinSize(new Size(this.applicationWidth, this.applicationHeight));
 
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
 
-            int.TryParse(this.lives.Text, out var livesRemaining);
-            int.TryParse(this.score.Text, out var currentScore);
-            int.TryParse(this.timerTexBlock.Text, out var currentTimer);
-
-            this.gameManager =
-                new GameManager(livesRemaining, currentScore, currentTimer);
+            this.gameManager = new GameManager
+            {
+                Lives = this.Lives,
+                Score = this.Score,
+                TimeCountDown = this.Timer,
+                Level = this.Level
+            };
 
             this.gameManager.InitializeGame(this.canvas);
             this.gameManager.LivesUpdated += this.livesUpdated;
             this.gameManager.ScoreUpdated += this.scoreUpdated;
             this.gameManager.GameOver += this.OnGameOver;
             this.gameManager.TimeOut += this.decrementTime;
+            this.gameManager.LevelUpdated += this.onLevelUpdated;
         }
 
         #endregion
 
         #region Methods
+
+        private void onLevelUpdated(object sender, EventArgs e)
+        {
+            this.level.Text = ((GameManager)sender).Level.ToString();
+        }
+
         private void decrementTime(object sender, EventArgs e)
         {
             this.timerTexBlock.Text = ((GameManager)sender).TimeCountDown.ToString();

@@ -80,7 +80,7 @@ namespace Frogger.Controller
 
                 foreach (var vehicle in lane.Vehicles)
                 {
-                    lane.MoveVehicle(vehicle, this.laneManager.LaneSpeeds[i], i);
+                    lane.MoveVehicle(vehicle, LaneManager.LaneSpeeds[i], i);
                 }
             }
         }

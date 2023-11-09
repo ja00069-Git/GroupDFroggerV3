@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Windows.Media.Playback;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -32,7 +31,7 @@ namespace Frogger.Controller
         /// <value>
         ///     The time count down.
         /// </value>
-        public int TimeCountDown { get; private set; }
+        public int TimeCountDown { get; set; }
 
         /// <summary>
         ///     Gets the player manager.
@@ -48,7 +47,7 @@ namespace Frogger.Controller
         /// <value>
         ///     The lives of the player.
         /// </value>
-        public int Lives { get; private set; }
+        public int Lives { get; set; }
 
         /// <summary>
         ///     Gets the current score of the player
@@ -56,7 +55,15 @@ namespace Frogger.Controller
         /// <value>
         ///     The current score of the player.
         /// </value>
-        public int Score { get; private set; }
+        public int Score { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the level.
+        /// </summary>
+        /// <value>
+        ///     The level.
+        /// </value>
+        public int Level { get; set; }
 
         #endregion
 
@@ -65,19 +72,13 @@ namespace Frogger.Controller
         /// <summary>
         ///     Initializes a new instance of the <see cref="GameManager" /> class.
         /// </summary>
-        /// <param name="lives"></param>
-        /// <param name="score"></param>
-        /// <param name="timeCountDown"></param>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     backgroundHeight &lt;= 0
         ///     or
         ///     backgroundWidth &lt;= 0
         /// </exception>
-        public GameManager(int lives, int score, int timeCountDown)
+        public GameManager()
         {
-            this.Lives = lives;
-            this.Score = score;
-            this.TimeCountDown = timeCountDown;
             this.setupGameTimer();
             this.setupLifeTimer();
             this.PlayerManager = new PlayerManager();
@@ -88,6 +89,11 @@ namespace Frogger.Controller
         #endregion
 
         #region Methods
+
+        /// <summary>
+        ///     Occurs when [level updated].
+        /// </summary>
+        public event EventHandler LevelUpdated;
 
         /// <summary>
         ///     Occurs when [time out].
@@ -146,9 +152,34 @@ namespace Frogger.Controller
                 throw new ArgumentNullException(nameof(gameCanvas));
             }
 
+            this.configureLevelParameters();
+
             this.createHomeLandingSPots(gameCanvas);
             this.laneManager.CreateAndPlaceLanes(gameCanvas);
             this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
+        }
+
+        private void configureLevelParameters()
+        {
+
+            switch (this.Level)
+            {
+                case 1:
+                    LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
+                    LaneManager.VehiclesPerLane = new[] { 2, 1, 3, 2, 4 };
+                    break;
+
+                case 2:
+                    LaneManager.LaneSpeeds = new[] { 0.2, 0.3, 0.4, 0.5, 0.6 };
+                    LaneManager.VehiclesPerLane = new[] { 3, 2, 4, 3, 5 };
+                    Debug.WriteLine(LaneManager.VehiclesPerLane[1]);
+                    break;
+
+                case 3:
+                    LaneManager.LaneSpeeds = new[] { 0.3, 0.4, 0.5, 0.6, 0.7 };
+                    LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
+                    break;
+            }
         }
 
         private void createHomeLandingSPots(Canvas gameCanvas)
@@ -169,10 +200,42 @@ namespace Frogger.Controller
             }
         }
 
-        private void timerOnTick(object sender, object e)
+        private async void timerOnTick(object sender, object e)
         {
+            if (this.Lives <= 0 || this.Level >= 3)
+            {
+                this.GameOver?.Invoke(this, EventArgs.Empty);
+                this.timer.Stop();
+                this.lifeDispatcherTimer.Stop();
+            }
+            else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
+            {
+                foreach (var spot in this.homeLandingSpots)
+                {
+                    spot.UnoccupySpot();
+                }
+
+                this.Level++;
+                await this.soundEffects.LevelUpSound();
+                this.configureLevelParameters();
+                this.LevelUpdated?.Invoke(this, EventArgs.Empty);
+            }
+
             this.moveVehicle();
             this.updateScore();
+        }
+
+        private bool allHomeLandingSpotsOccupied()
+        {
+            foreach (var spot in this.homeLandingSpots)
+            {
+                if (!spot.PodOccupied)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void moveVehicle()
@@ -253,30 +316,14 @@ namespace Frogger.Controller
             this.TimeCountDown = 20;
         }
 
-        private async void onScoreUpdated()
+        private void onScoreUpdated()
         {
             this.ScoreUpdated?.Invoke(this, EventArgs.Empty);
-
-            if (this.homeLandingSpots.All(spot => spot.PodOccupied))
-            {
-                await this.soundEffects.LevelUpSound();
-                this.GameOver?.Invoke(this, EventArgs.Empty);
-                this.timer.Stop();
-                this.lifeDispatcherTimer.Stop();
-            }
         }
 
-        private async void onLivesUpdated()
+        private void onLivesUpdated()
         {
             this.LivesUpdated?.Invoke(this, EventArgs.Empty);
-
-            if (this.Lives == 0)
-            {
-                await this.soundEffects.GameOverSound();
-                this.GameOver?.Invoke(this, EventArgs.Empty);
-                this.timer.Stop();
-                this.lifeDispatcherTimer.Stop();
-            }
         }
 
         private async void onTimeOutChanged()
@@ -284,15 +331,14 @@ namespace Frogger.Controller
             this.TimeOut?.Invoke(this, EventArgs.Empty);
             if (this.TimeCountDown == 0)
             {
-                await this.soundEffects.DyingSound();
                 this.TimeCountDown = 20;
                 this.Lives--;
                 this.onLivesUpdated();
+                await this.soundEffects.DyingSound();
                 this.lifeDispatcherTimer.Start();
             }
             this.onLivesUpdated();
         }
-
         #endregion
     }
 }

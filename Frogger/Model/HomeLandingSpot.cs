@@ -46,5 +46,18 @@ namespace Frogger.Model
         }
 
         #endregion
+
+        /// <summary>
+        /// Releases the pod.
+        /// </summary>
+        public void UnoccupySpot()
+        {
+            this.PodOccupied = false;
+            var frog = (HomeSprite)Sprite.FindName("homeSprite");
+            if (frog != null)
+            {
+                frog.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

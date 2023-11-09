@@ -38,7 +38,15 @@ namespace Frogger.Controller
         /// <summary>
         ///     lane speeds
         /// </summary>
-        public double[] LaneSpeeds { get; } = { 0.3, 0.4, 0.5, 0.6, 0.7 };
+        public static double[] LaneSpeeds { get; set; } = { 0.1, 0.2, 0.3, 0.4, 0.5 };
+
+        /// <summary>
+        ///     Gets or sets the vehicles per lane.
+        /// </summary>
+        /// <value>
+        ///     The vehicles per lane.
+        /// </value>
+        public static int[] VehiclesPerLane { get; set; }
 
         #endregion
 
@@ -70,7 +78,6 @@ namespace Frogger.Controller
             {
                 var laneHeight = 50;
                 this.determineLaneProperties(laneIndex, out var laneVehicle, out var numVehicles);
-
                 var lane = this.createLane(gameCanvas, laneVehicle);
                 lanePosition(lane, laneIndex, lowShoulderY, laneHeight);
                 this.VehicleManager.PlaceVehiclesInLane(gameCanvas, lane, laneVehicle, numVehicles, laneIndex);
@@ -113,23 +120,23 @@ namespace Frogger.Controller
             {
                 case 1:
                     laneVehicle = VehicleType.Car;
-                    numVehicles = 3;
+                    numVehicles = VehiclesPerLane[0];
                     break;
                 case 2:
                     laneVehicle = VehicleType.Semi;
-                    numVehicles = 2;
+                    numVehicles = VehiclesPerLane[1];
                     break;
                 case 3:
                     laneVehicle = VehicleType.Car;
-                    numVehicles = 4;
+                    numVehicles = VehiclesPerLane[2];
                     break;
                 case 4:
                     laneVehicle = VehicleType.Semi;
-                    numVehicles = 3;
+                    numVehicles = VehiclesPerLane[3];
                     break;
                 default:
                     laneVehicle = VehicleType.Car;
-                    numVehicles = 5;
+                    numVehicles = VehiclesPerLane[4];
                     break;
             }
         }
