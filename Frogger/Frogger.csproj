@@ -130,6 +130,7 @@
     <Compile Include="Model\GameObject.cs" />
     <Compile Include="Model\HomeLandingSpot.cs" />
     <Compile Include="Model\Lane.cs" />
+    <Compile Include="Model\PowerUp.cs" />
     <Compile Include="Model\Vehicle.cs" />
     <Compile Include="Model\VehicleType.cs" />
     <Compile Include="View\GamePage.xaml.cs">

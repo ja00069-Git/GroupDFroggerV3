@@ -8,14 +8,20 @@ using Frogger.Model.Frogger.Model;
 namespace Frogger.Controller
 {
     /// <summary>
-    /// Vehicle Manager
+    ///     Vehicle Manager
     /// </summary>
     public class VehicleManager
     {
+        #region Data members
+
         private readonly LaneManager laneManager;
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="VehicleManager"/> class.
+        ///     Initializes a new instance of the <see cref="VehicleManager" /> class.
         /// </summary>
         /// <param name="laneManager">The lane manager.</param>
         public VehicleManager(LaneManager laneManager)
@@ -23,8 +29,12 @@ namespace Frogger.Controller
             this.laneManager = laneManager;
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Places the vehicles in lane.
+        ///     Places the vehicles in lane.
         /// </summary>
         /// <param name="gameCanvas">The game canvas.</param>
         /// <param name="lane">The lane.</param>
@@ -70,7 +80,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Moves the vehicles
+        ///     Moves the vehicles
         /// </summary>
         public void MoveVehicle()
         {
@@ -84,5 +94,7 @@ namespace Frogger.Controller
                 }
             }
         }
+
+        #endregion
     }
 }

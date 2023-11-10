@@ -92,7 +92,6 @@ namespace Frogger.Controller
             }
         }
 
-
         private void setupVehicleAdditionTimer()
         {
             this.vehicleAdditionTimer = new DispatcherTimer();

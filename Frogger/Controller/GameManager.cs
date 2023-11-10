@@ -19,6 +19,8 @@ namespace Frogger.Controller
         private readonly LaneManager laneManager;
         private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
         private readonly SoundEffects soundEffects;
+        private readonly PowerUp powerUp = new PowerUp();
+        private int homeLandingCount;
 
         #endregion
 
@@ -219,6 +221,10 @@ namespace Frogger.Controller
 
                 this.Level++;
                 await this.soundEffects.LevelUpSound();
+                this.deactivatePowerUp();
+                this.homeLandingCount = 0;
+                this.configureLevelParameters(gameCanvas);
+                this.LevelUpdated?.Invoke(this, EventArgs.Empty);
 
                 if (this.Level <= 3)
                 {
@@ -237,7 +243,6 @@ namespace Frogger.Controller
             this.moveVehicle();
             this.updateScore();
         }
-
 
         private bool allHomeLandingSpotsOccupied()
         {
@@ -324,10 +329,34 @@ namespace Frogger.Controller
         {
             await this.soundEffects.LandingHomeSounds();
             var increaseScoreBy = this.TimeCountDown;
+
+            if (this.powerUp.IsActive)
+            {
+                increaseScoreBy *= this.powerUp.HasDoubleScoreEffect ? 2 : 1;
+            }
+
             this.Score += increaseScoreBy;
+
+            if (++this.homeLandingCount == 3)
+            {
+                await this.soundEffects.LandingHomeSounds();
+                this.activatePowerUp();
+            }
+
             this.onScoreUpdated();
             this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
             this.TimeCountDown = 20;
+        }
+
+        private async void activatePowerUp()
+        {
+            this.powerUp.Activate(true);
+            await this.soundEffects.PowerUpSound();
+        }
+
+        private void deactivatePowerUp()
+        {
+            this.powerUp.Deactivate();
         }
 
         private void onScoreUpdated()

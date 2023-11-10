@@ -5,26 +5,32 @@ using Frogger.Model;
 namespace Frogger.Controller
 {
     /// <summary>
-    /// Player manager
+    ///     Player manager
     /// </summary>
     public class PlayerManager
     {
-        #region Data members          
-        /// <summary>
-        /// Gets the player.
-        /// </summary>
-        /// <value>
-        /// The player.
-        /// </value>
-        public Frog Player { get; } = new Frog();
+        #region Data members
 
         private readonly double backgroundWidth = (double)Application.Current.Resources["AppWidth"];
 
         #endregion
 
-        #region Methods        
+        #region Properties
+
         /// <summary>
-        /// Creates the and place player.
+        ///     Gets the player.
+        /// </summary>
+        /// <value>
+        ///     The player.
+        /// </value>
+        public Frog Player { get; } = new Frog();
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Creates the and place player.
         /// </summary>
         /// <param name="gameCanvas">The game canvas.</param>
         public void CreateAndPlacePlayer(Canvas gameCanvas)
@@ -35,8 +41,9 @@ namespace Frogger.Controller
 
             this.SetPlayerToCenterOfBottomShoulder();
         }
+
         /// <summary>
-        /// Sets the player to center of bottom shoulder.
+        ///     Sets the player to center of bottom shoulder.
         /// </summary>
         public void SetPlayerToCenterOfBottomShoulder()
         {

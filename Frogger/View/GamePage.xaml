@@ -19,20 +19,29 @@
                    Width="{StaticResource AppWidth}" Height="55" />
 
         <!-- HUD Elements -->
-        <TextBlock Canvas.Left="475" FontSize="20" Text="Lives: " Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <TextBlock x:Name="lives" Canvas.Left="527" FontSize="20" Text="4" Canvas.Top="15" HorizontalAlignment="Center" VerticalAlignment="Top" />
-        <TextBlock Canvas.Left="290" Foreground="Green" FontSize="20" Text="Frogger" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <TextBlock Canvas.Left="560" FontSize="20" Text="Score:" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <TextBlock x:Name="score" Canvas.Left="619" FontSize="20" Text="0" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <TextBlock Canvas.Left="8" FontSize="20" Text="Level:" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <TextBlock x:Name="level" Canvas.Left="62" FontSize="20" Text="1" Canvas.Top="15" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <TextBlock Canvas.Left="475" FontSize="20" Text="Lives: " Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+        <TextBlock x:Name="lives" Canvas.Left="527" FontSize="20" Text="4" Canvas.Top="15" HorizontalAlignment="Center"
+                   VerticalAlignment="Top" />
+        <TextBlock Canvas.Left="290" Foreground="Green" FontSize="20" Text="Frogger" Canvas.Top="15"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <TextBlock Canvas.Left="560" FontSize="20" Text="Score:" Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+        <TextBlock x:Name="score" Canvas.Left="619" FontSize="20" Text="0" Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+        <TextBlock Canvas.Left="8" FontSize="20" Text="Level:" Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+        <TextBlock x:Name="level" Canvas.Left="62" FontSize="20" Text="1" Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
 
         <!-- Game Over TextBlock -->
         <TextBlock x:Name="gameOverTextBlock" Visibility="Collapsed" FontSize="36" Text="Game Over"
                    HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="246" Canvas.Top="205" />
 
         <!-- Life timer TextBlock -->
-        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="415" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Left="3"/>
-        <TextBlock x:Name="timerTexBlock" Canvas.Left="62" Text="20" FontSize="20" Canvas.Top="415" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.621,0.747"/>
+        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="415" HorizontalAlignment="Center" VerticalAlignment="Top"
+                   Canvas.Left="3" />
+        <TextBlock x:Name="timerTexBlock" Canvas.Left="62" Text="20" FontSize="20" Canvas.Top="415"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.621,0.747" />
     </Canvas>
 </Page>

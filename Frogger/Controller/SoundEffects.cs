@@ -7,14 +7,20 @@ using Windows.Media.Playback;
 namespace Frogger.Controller
 {
     /// <summary>
-    /// Sound effects of the game
+    ///     Sound effects of the game
     /// </summary>
     public class SoundEffects
     {
+        #region Data members
+
         private MediaPlayer player = new MediaPlayer();
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Games the over sound.
+        ///     Games the over sound.
         /// </summary>
         public async Task GameOverSound()
         {
@@ -27,7 +33,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Landings the home sounds.
+        ///     Landings the home sounds.
         /// </summary>
         public async Task LandingHomeSounds()
         {
@@ -41,7 +47,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Dyings the sound.
+        ///     Dyings the sound.
         /// </summary>
         public async Task DyingSound()
         {
@@ -54,7 +60,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Levels up sound.
+        ///     Levels up sound.
         /// </summary>
         public async Task LevelUpSound()
         {
@@ -66,7 +72,10 @@ namespace Frogger.Controller
             this.player.Play();
         }
 
-        private async Task powerUpSound()
+        /// <summary>
+        /// Powers up sound.
+        /// </summary>
+        public async Task PowerUpSound()
         {
             var soundsFolder =
                 await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
@@ -75,5 +84,7 @@ namespace Frogger.Controller
             this.player.Source = mediaSource;
             this.player.Play();
         }
+
+        #endregion
     }
 }
