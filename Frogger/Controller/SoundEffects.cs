@@ -73,7 +73,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Powers up sound.
+        ///     Powers up sound.
         /// </summary>
         public async Task PowerUpSound()
         {

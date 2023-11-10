@@ -140,6 +140,13 @@ namespace Frogger.View
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.gameManager.ResetGame(this.canvas);
+            this.gameOverTextBlock.Visibility = Visibility.Collapsed;
+            this.onLevelUpdated(this.gameManager, EventArgs.Empty);
+        }
+
         #endregion
     }
 }

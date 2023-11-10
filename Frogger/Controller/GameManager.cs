@@ -214,10 +214,7 @@ namespace Frogger.Controller
             }
             else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
             {
-                foreach (var spot in this.homeLandingSpots)
-                {
-                    spot.UnoccupySpot();
-                }
+                this.unOccupyHomeLandingSpots();
 
                 this.Level++;
                 await this.soundEffects.LevelUpSound();
@@ -382,6 +379,46 @@ namespace Frogger.Controller
             }
 
             this.onLivesUpdated();
+        }
+
+        /// <summary>
+        ///     Resets the game.
+        /// </summary>
+        /// <param name="gameCanvas">The game canvas.</param>
+        public void ResetGame(Canvas gameCanvas)
+        {
+            this.timer.Stop();
+            this.lifeDispatcherTimer.Stop();
+
+            this.laneManager.ClearLanesAndVehicles(gameCanvas);
+
+            this.unOccupyHomeLandingSpots();
+
+            this.resetGameStats();
+
+            this.timer.Start();
+            this.lifeDispatcherTimer.Start();
+
+            this.configureLevelParameters(gameCanvas);
+        }
+
+        private void unOccupyHomeLandingSpots()
+        {
+            foreach (var spot in this.homeLandingSpots)
+            {
+                spot.UnoccupySpot();
+            }
+        }
+
+        private void resetGameStats()
+        {
+            this.Lives = 4;
+            this.onLivesUpdated();
+            this.Score = 0;
+            this.onScoreUpdated();
+            this.Level = 1;
+            this.TimeCountDown = 20;
+            this.onTimeOutChanged();
         }
 
         #endregion

@@ -71,8 +71,7 @@ namespace Frogger.Controller
         /// <param name="gameCanvas">The game canvas.</param>
         public void CreateAndPlaceLanes(Canvas gameCanvas)
         {
-            this.Lanes.Clear();
-
+            this.ClearLanesAndVehicles(gameCanvas);
             var lowShoulderY = (double)Application.Current.Resources["LowShoulderYLocation"];
 
             const int maxLanes = 5;
@@ -154,6 +153,26 @@ namespace Frogger.Controller
             var lane = new Lane(laneVehicle);
             gameCanvas.Children.Add(lane.Sprite);
             return lane;
+        }
+
+        /// <summary>
+        ///     Clears the lanes and vehicles.
+        /// </summary>
+        /// <param name="gameCanvas">The game canvas.</param>
+        public void ClearLanesAndVehicles(Canvas gameCanvas)
+        {
+            foreach (var lane in this.Lanes)
+            {
+                foreach (var vehicle in lane.Vehicles)
+                {
+                    gameCanvas.Children.Remove(vehicle.Sprite);
+                }
+
+                lane.Vehicles.Clear();
+                gameCanvas.Children.Remove(lane.Sprite);
+            }
+
+            this.Lanes.Clear();
         }
 
         #endregion
