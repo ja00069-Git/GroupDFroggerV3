@@ -19,7 +19,7 @@ namespace Frogger.Controller
         public async Task GameOverSound()
         {
             var soundsFolder =
-                await Package.Current.InstalledLocation.GetFolderAsync(@"Sounds");
+                await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
             var soundFile = await soundsFolder.GetFileAsync("frogger-gameOver-sound.wav");
             var mediaSource = MediaSource.CreateFromStorageFile(soundFile);
             this.player.Source = mediaSource;
@@ -33,7 +33,7 @@ namespace Frogger.Controller
         {
             this.player = new MediaPlayer();
             var soundsFolder =
-                await Package.Current.InstalledLocation.GetFolderAsync(@"Sounds");
+                await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
             var soundFile = await soundsFolder.GetFileAsync("frogger-homeLanding-sound.wav");
             var mediaSource = MediaSource.CreateFromStorageFile(soundFile);
             this.player.Source = mediaSource;
@@ -46,7 +46,7 @@ namespace Frogger.Controller
         public async Task DyingSound()
         {
             var soundsFolder =
-                await Package.Current.InstalledLocation.GetFolderAsync(@"Sounds");
+                await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
             var soundFile = await soundsFolder.GetFileAsync("frogger-dying-sound.wav");
             var mediaSource = MediaSource.CreateFromStorageFile(soundFile);
             this.player.Source = mediaSource;
@@ -59,7 +59,7 @@ namespace Frogger.Controller
         public async Task LevelUpSound()
         {
             var soundsFolder =
-                await Package.Current.InstalledLocation.GetFolderAsync(@"Sounds");
+                await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
             var soundFile = await soundsFolder.GetFileAsync("frogger-levelUp-sound.wav");
             var mediaSource = MediaSource.CreateFromStorageFile(soundFile);
             this.player.Source = mediaSource;
@@ -69,7 +69,7 @@ namespace Frogger.Controller
         private async Task powerUpSound()
         {
             var soundsFolder =
-                await Package.Current.InstalledLocation.GetFolderAsync(@"Sounds");
+                await Package.Current.InstalledLocation.GetFolderAsync("Sounds");
             var soundFile = await soundsFolder.GetFileAsync("frogger-powerUp-sound.wav");
             var mediaSource = MediaSource.CreateFromStorageFile(soundFile);
             this.player.Source = mediaSource;

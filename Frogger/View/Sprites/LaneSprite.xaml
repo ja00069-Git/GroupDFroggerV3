@@ -10,6 +10,6 @@
     Width="{StaticResource AppWidth}">
 
     <Canvas>
-        <Rectangle Fill="Transparent" Height="50" Width="{StaticResource AppWidth}" />
+        <Rectangle Fill="Aqua" Height="50" Width="{StaticResource AppWidth}" />
     </Canvas>
 </local:BaseSprite>

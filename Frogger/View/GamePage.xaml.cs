@@ -23,54 +23,39 @@ namespace Frogger.View
 
         #endregion
 
-        #region Properties        
-        /// <summary>
-        /// Gets or sets the lives.
-        /// </summary>
-        /// <value>
-        /// The lives.
-        /// </value>
-        public int Lives
-        {
-            get => int.TryParse(this.lives.Text, out var livesRemaining) ? livesRemaining : 0;
-            set => this.lives.Text = value.ToString();
-        }
+        #region Properties
 
         /// <summary>
-        /// Gets or sets the score.
+        ///     Gets or sets the lives.
         /// </summary>
         /// <value>
-        /// The score.
+        ///     The lives.
         /// </value>
-        public int Score
-        {
-            get => int.TryParse(this.score.Text, out var currentScore) ? currentScore : 0;
-            set => this.score.Text = value.ToString();
-        }
+        private int Lives => int.TryParse(this.lives.Text, out var livesRemaining) ? livesRemaining : 0;
 
         /// <summary>
-        /// Gets or sets the timer.
+        ///     Gets or sets the score.
         /// </summary>
         /// <value>
-        /// The timer.
+        ///     The score.
         /// </value>
-        public int Timer
-        {
-            get => int.TryParse(this.timerTexBlock.Text, out var currentTimer) ? currentTimer : 0;
-            set => this.timerTexBlock.Text = value.ToString();
-        }
+        private int Score => int.TryParse(this.score.Text, out var currentScore) ? currentScore : 0;
 
         /// <summary>
-        /// Gets or sets the level.
+        ///     Gets or sets the timer.
         /// </summary>
         /// <value>
-        /// The level.
+        ///     The timer.
         /// </value>
-        public int Level
-        {
-            get => int.TryParse(this.level.Text, out var currLevel) ? currLevel : 0;
-            set => this.level.Text = value.ToString();
-        }
+        private int Timer => int.TryParse(this.timerTexBlock.Text, out var currentTimer) ? currentTimer : 0;
+
+        /// <summary>
+        ///     Gets or sets the level.
+        /// </summary>
+        /// <value>
+        ///     The level.
+        /// </value>
+        private int Level => int.TryParse(this.level.Text, out var currLevel) ? currLevel : 0;
 
         #endregion
 
@@ -84,14 +69,14 @@ namespace Frogger.View
             this.InitializeComponent();
 
             ApplicationView.PreferredLaunchViewSize = new Size
-            { Width = this.applicationWidth, Height = this.applicationHeight };
+                { Width = this.applicationWidth, Height = this.applicationHeight };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView()
                 .SetPreferredMinSize(new Size(this.applicationWidth, this.applicationHeight));
 
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
 
-            this.gameManager = new GameManager
+            this.gameManager = new GameManager(this.canvas)
             {
                 Lives = this.Lives,
                 Score = this.Score,

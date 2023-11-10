@@ -13,7 +13,7 @@ namespace Frogger.Model
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="Vehicle"/> class.
+            ///     Initializes a new instance of the <see cref="Vehicle" /> class.
             /// </summary>
             /// <param name="initialSpeedX">The initial speed x.</param>
             /// <param name="initialSpeedY">The initial speed y.</param>

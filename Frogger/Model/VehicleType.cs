@@ -6,11 +6,12 @@
     public enum VehicleType
     {
         /// <summary>
-        /// Car enum, vehicle type
+        ///     Car enum, vehicle type
         /// </summary>
         Car,
+
         /// <summary>
-        /// Semi enum, vehicle type
+        ///     Semi enum, vehicle type
         /// </summary>
         Semi
     }

@@ -38,7 +38,7 @@ namespace Frogger.Controller
         /// <summary>
         ///     lane speeds
         /// </summary>
-        public static double[] LaneSpeeds { get; set; } = { 0.1, 0.2, 0.3, 0.4, 0.5 };
+        public static double[] LaneSpeeds { get; set; }
 
         /// <summary>
         ///     Gets or sets the vehicles per lane.
@@ -71,6 +71,8 @@ namespace Frogger.Controller
         /// <param name="gameCanvas">The game canvas.</param>
         public void CreateAndPlaceLanes(Canvas gameCanvas)
         {
+            this.Lanes.Clear();
+
             var lowShoulderY = (double)Application.Current.Resources["LowShoulderYLocation"];
 
             const int maxLanes = 5;
@@ -89,6 +91,7 @@ namespace Frogger.Controller
                 }
             }
         }
+
 
         private void setupVehicleAdditionTimer()
         {

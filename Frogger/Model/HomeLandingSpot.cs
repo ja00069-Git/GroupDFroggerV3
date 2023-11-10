@@ -4,7 +4,7 @@ using Frogger.View.Sprites;
 namespace Frogger.Model
 {
     /// <summary>
-    /// Home Landing spot
+    ///     Home Landing spot
     /// </summary>
     /// <seealso cref="GameObject" />
     public class HomeLandingSpot : GameObject
@@ -45,10 +45,8 @@ namespace Frogger.Model
             }
         }
 
-        #endregion
-
         /// <summary>
-        /// Releases the pod.
+        ///     Releases the pod.
         /// </summary>
         public void UnoccupySpot()
         {
@@ -59,5 +57,7 @@ namespace Frogger.Model
                 frog.Visibility = Visibility.Collapsed;
             }
         }
+
+        #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -77,9 +76,9 @@ namespace Frogger.Controller
         ///     or
         ///     backgroundWidth &lt;= 0
         /// </exception>
-        public GameManager()
+        public GameManager(Canvas gameCanvas)
         {
-            this.setupGameTimer();
+            this.setupGameTimer(gameCanvas);
             this.setupLifeTimer();
             this.PlayerManager = new PlayerManager();
             this.laneManager = new LaneManager();
@@ -115,11 +114,11 @@ namespace Frogger.Controller
         /// </summary>
         public event EventHandler GameOver;
 
-        private void setupGameTimer()
+        private void setupGameTimer(Canvas gameCanvas)
         {
             this.timer = new DispatcherTimer();
-            this.timer.Tick += this.timerOnTick;
-            this.timer.Interval = new TimeSpan(0, 0, 0, 0, 15);
+            this.timer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
+            this.timer.Interval = TimeSpan.FromMilliseconds(15);
             this.timer.Start();
         }
 
@@ -127,7 +126,7 @@ namespace Frogger.Controller
         {
             this.lifeDispatcherTimer = new DispatcherTimer();
             this.lifeDispatcherTimer.Tick += this.lifeDispatcherTimerOnTick;
-            this.lifeDispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            this.lifeDispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             this.lifeDispatcherTimer.Start();
         }
 
@@ -152,32 +151,34 @@ namespace Frogger.Controller
                 throw new ArgumentNullException(nameof(gameCanvas));
             }
 
-            this.configureLevelParameters();
-
+            this.configureLevelParameters(gameCanvas);
             this.createHomeLandingSPots(gameCanvas);
-            this.laneManager.CreateAndPlaceLanes(gameCanvas);
-            this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
         }
 
-        private void configureLevelParameters()
+        private void configureLevelParameters(Canvas gameCanvas)
         {
-
             switch (this.Level)
             {
                 case 1:
                     LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 2, 1, 3, 2, 4 };
+
+                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
                     break;
 
                 case 2:
-                    LaneManager.LaneSpeeds = new[] { 0.2, 0.3, 0.4, 0.5, 0.6 };
+                    LaneManager.LaneSpeeds = new[] { 0.3, 0.4, 0.5, 0.6, 0.7 };
                     LaneManager.VehiclesPerLane = new[] { 3, 2, 4, 3, 5 };
-                    Debug.WriteLine(LaneManager.VehiclesPerLane[1]);
+                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
                     break;
 
                 case 3:
-                    LaneManager.LaneSpeeds = new[] { 0.3, 0.4, 0.5, 0.6, 0.7 };
+                    LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
+                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
                     break;
             }
         }
@@ -200,11 +201,12 @@ namespace Frogger.Controller
             }
         }
 
-        private async void timerOnTick(object sender, object e)
+        private async void timerOnTick(Canvas gameCanvas)
         {
-            if (this.Lives <= 0 || this.Level >= 3)
+            if (this.Lives <= 0)
             {
                 this.GameOver?.Invoke(this, EventArgs.Empty);
+                await this.soundEffects.GameOverSound();
                 this.timer.Stop();
                 this.lifeDispatcherTimer.Stop();
             }
@@ -217,13 +219,25 @@ namespace Frogger.Controller
 
                 this.Level++;
                 await this.soundEffects.LevelUpSound();
-                this.configureLevelParameters();
-                this.LevelUpdated?.Invoke(this, EventArgs.Empty);
+
+                if (this.Level <= 3)
+                {
+                    this.configureLevelParameters(gameCanvas);
+                    this.LevelUpdated?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    this.GameOver?.Invoke(this, EventArgs.Empty);
+                    await this.soundEffects.GameOverSound();
+                    this.timer.Stop();
+                    this.lifeDispatcherTimer.Stop();
+                }
             }
 
             this.moveVehicle();
             this.updateScore();
         }
+
 
         private bool allHomeLandingSpotsOccupied()
         {
@@ -337,8 +351,10 @@ namespace Frogger.Controller
                 await this.soundEffects.DyingSound();
                 this.lifeDispatcherTimer.Start();
             }
+
             this.onLivesUpdated();
         }
+
         #endregion
     }
 }

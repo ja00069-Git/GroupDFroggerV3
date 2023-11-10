@@ -29,7 +29,10 @@ namespace Frogger.Controller
         /// <param name="gameCanvas">The game canvas.</param>
         public void CreateAndPlacePlayer(Canvas gameCanvas)
         {
+            gameCanvas.Children.Remove(this.Player.Sprite);
+
             gameCanvas.Children.Add(this.Player.Sprite);
+
             this.SetPlayerToCenterOfBottomShoulder();
         }
         /// <summary>

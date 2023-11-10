@@ -174,7 +174,7 @@ namespace Frogger.Model
         }
 
         /// <summary>
-        /// Checks the collision.
+        ///     Checks the collision.
         /// </summary>
         /// <param name="gameObject">The game object.</param>
         /// <returns></returns>
@@ -183,13 +183,13 @@ namespace Frogger.Model
             if (this.Sprite.Visibility == Visibility.Visible && gameObject.Sprite.Visibility == Visibility.Visible)
             {
                 var rect1 = new Rectangle((int)this.X, (int)this.Y, (int)this.Width, (int)this.Height);
-                var rect2 = new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width, (int)gameObject.Height);
+                var rect2 = new Rectangle((int)gameObject.X, (int)gameObject.Y, (int)gameObject.Width,
+                    (int)gameObject.Height);
                 return rect1.IntersectsWith(rect2);
             }
 
             return false;
         }
-
 
         #endregion
     }
