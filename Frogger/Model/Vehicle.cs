@@ -27,7 +27,7 @@ namespace Frogger.Model
     }
 
     /// <summary>
-    ///     Defines a semi ( a type of a vehicle of the game )
+    ///     Defines a semi ( a type of vehicle in the game )
     /// </summary>
     public class Semi : Vehicle
     {
@@ -45,7 +45,7 @@ namespace Frogger.Model
     }
 
     /// <summary>
-    ///     Defines a car ( a type of vehicle of a of the game )
+    ///     Defines a car ( a type of vehicle in the game )
     /// </summary>
     public class Car : Vehicle
     {
@@ -60,5 +60,20 @@ namespace Frogger.Model
         }
 
         #endregion
+    }
+
+
+    /// <summary>
+    ///   Defines a tank ( a type of vehicle in the game )
+    /// </summary>
+    public class Tank : Vehicle
+    {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Tank" /> class.
+        /// </summary>
+        public Tank() : base(0, 0)
+        {
+            Sprite = new TankSprite();
+        }
     }
 }

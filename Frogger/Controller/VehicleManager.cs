@@ -57,8 +57,26 @@ namespace Frogger.Controller
 
         private Vehicle createVehicle(VehicleType laneVehicle, int laneIndex)
         {
-            var vehicle = laneVehicle == VehicleType.Car ? (Vehicle)new Car() : new Semi();
+            var vehicle = this.createVehicleOnType(laneVehicle);
             determineIfVehicleTransform(vehicle, laneIndex);
+            return vehicle;
+        }
+
+        private Vehicle createVehicleOnType(VehicleType vehicleType)
+        {
+            Vehicle vehicle = null;
+            switch (vehicleType)
+            {
+                case VehicleType.Car:
+                    vehicle = new Car();
+                    break;
+                case VehicleType.Semi:
+                    vehicle = new Semi();
+                    break;
+                case VehicleType.Tank:
+                    vehicle =new Tank();
+                    break;
+            }
             return vehicle;
         }
 
