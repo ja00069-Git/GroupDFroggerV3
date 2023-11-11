@@ -136,7 +136,7 @@ namespace Frogger.Controller
                     numVehicles = VehiclesPerLane[3];
                     break;
                 default:
-                    laneVehicle = VehicleType.Car;
+                    laneVehicle = VehicleType.Tank;
                     numVehicles = VehiclesPerLane[4];
                     break;
             }

@@ -13,6 +13,11 @@
         /// <summary>
         ///     Semi enum, vehicle type
         /// </summary>
-        Semi
+        Semi,
+
+        /// <summary>
+        ///     Tank enum, vehicle type
+        /// </summary>
+        Tank
     }
 }
