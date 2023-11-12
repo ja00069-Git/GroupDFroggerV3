@@ -16,7 +16,9 @@ namespace Frogger.Controller
 
         private DispatcherTimer timer;
         private DispatcherTimer lifeDispatcherTimer;
+
         private readonly LaneManager laneManager;
+
         private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
         private readonly SoundEffects soundEffects;
         private readonly PowerUp powerUp = new PowerUp();

@@ -168,6 +168,9 @@
     <Compile Include="View\Sprites\LaneSprite.xaml.cs">
       <DependentUpon>LaneSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Sprites\PowerUpSprite.xaml.cs">
+      <DependentUpon>PowerUpSprite.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\SemiSprite.xaml.cs">
       <DependentUpon>SemiSprite.xaml</DependentUpon>
     </Compile>
@@ -241,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\LaneSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\PowerUpSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
