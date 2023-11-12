@@ -143,6 +143,18 @@
     <Compile Include="View\Sprites\CarSprite.xaml.cs">
       <DependentUpon>CarSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame1.xaml.cs">
+      <DependentUpon>DeathSpriteFrame1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame2.xaml.cs">
+      <DependentUpon>DeathSpriteFrame2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame3.xaml.cs">
+      <DependentUpon>DeathSpriteFrame3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame4.xaml.cs">
+      <DependentUpon>DeathSpriteFrame4.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\FrogSprite.xaml.cs">
       <DependentUpon>FrogSprite.xaml</DependentUpon>
     </Compile>
@@ -200,6 +212,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame4.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Sprites\FrogSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -230,9 +258,7 @@
       <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Sprites\DeathFrames\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -18,28 +18,28 @@
 
     <Canvas>
         <!-- Tires -->
-        <Rectangle Height="10" Canvas.Left="15" Fill="{StaticResource Tires}" Canvas.Top="40" Width="35"/>
-        <Rectangle Height="10" Canvas.Left="15" Fill="{StaticResource Tires}" Width="35"/>
+        <Rectangle Height="10" Canvas.Left="15" Fill="{StaticResource Tires}" Canvas.Top="40" Width="35" />
+        <Rectangle Height="10" Canvas.Left="15" Fill="{StaticResource Tires}" Width="35" />
 
-        <Rectangle Height="7" Canvas.Left="20" Fill="{StaticResource TiresSecondary}" Width="5"/>
-        <Rectangle Height="7" Canvas.Left="30" Fill="{StaticResource TiresSecondary}" Width="5"/>
-        <Rectangle Height="7" Canvas.Left="40" Fill="{StaticResource TiresSecondary}" Width="5"/>
-        <Rectangle Height="7" Canvas.Left="20" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43"/>
-        <Rectangle Height="7" Canvas.Left="30" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43"/>
-        <Rectangle Height="7" Canvas.Left="40" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43"/>
+        <Rectangle Height="7" Canvas.Left="20" Fill="{StaticResource TiresSecondary}" Width="5" />
+        <Rectangle Height="7" Canvas.Left="30" Fill="{StaticResource TiresSecondary}" Width="5" />
+        <Rectangle Height="7" Canvas.Left="40" Fill="{StaticResource TiresSecondary}" Width="5" />
+        <Rectangle Height="7" Canvas.Left="20" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43" />
+        <Rectangle Height="7" Canvas.Left="30" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43" />
+        <Rectangle Height="7" Canvas.Left="40" Fill="{StaticResource TiresSecondary}" Width="5" Canvas.Top="43" />
 
         <!-- Body -->
-        <Rectangle Height="36" Canvas.Left="20" Fill="{StaticResource CarBody}" Canvas.Top="7" Width="25"/>
-        <Rectangle Height="20" Canvas.Left="43" Fill="{StaticResource Parts}" Canvas.Top="15" Width="5"/>
-        <Rectangle Height="5" Canvas.Left="4" Fill="{StaticResource ResourceKey=Parts}" Canvas.Top="23" Width="19"/>
-        <Rectangle Height="10" Fill="{StaticResource ResourceKey=Parts}" Canvas.Top="20" Width="4"/>
-        <Rectangle Height="18" Canvas.Left="23" Fill="{StaticResource Parts}" Canvas.Top="16" Width="15"/>
-        <Rectangle Height="10" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="20" Width="5"/>
-        <Rectangle Height="13" Canvas.Left="20" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="30" Width="5"/>
-        <Rectangle Height="11" Canvas.Left="23" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="32" Width="5"/>
-        <Rectangle Height="9" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="34" Width="10"/>
-        <Rectangle Height="13" Canvas.Left="20" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="5"/>
-        <Rectangle Height="11" Canvas.Left="23" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="5"/>
-        <Rectangle Height="9" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="10"/>
+        <Rectangle Height="36" Canvas.Left="20" Fill="{StaticResource CarBody}" Canvas.Top="7" Width="25" />
+        <Rectangle Height="20" Canvas.Left="43" Fill="{StaticResource Parts}" Canvas.Top="15" Width="5" />
+        <Rectangle Height="5" Canvas.Left="4" Fill="{StaticResource ResourceKey=Parts}" Canvas.Top="23" Width="19" />
+        <Rectangle Height="10" Fill="{StaticResource ResourceKey=Parts}" Canvas.Top="20" Width="4" />
+        <Rectangle Height="18" Canvas.Left="23" Fill="{StaticResource Parts}" Canvas.Top="16" Width="15" />
+        <Rectangle Height="10" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="20" Width="5" />
+        <Rectangle Height="13" Canvas.Left="20" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="30" Width="5" />
+        <Rectangle Height="11" Canvas.Left="23" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="32" Width="5" />
+        <Rectangle Height="9" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="34" Width="10" />
+        <Rectangle Height="13" Canvas.Left="20" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="5" />
+        <Rectangle Height="11" Canvas.Left="23" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="5" />
+        <Rectangle Height="9" Canvas.Left="28" Fill="{StaticResource ResourceKey=CarBody}" Canvas.Top="7" Width="10" />
     </Canvas>
 </local:BaseSprite>

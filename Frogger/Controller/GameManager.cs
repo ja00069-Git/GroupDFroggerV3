@@ -66,6 +66,8 @@ namespace Frogger.Controller
         /// </value>
         public int Level { get; set; }
 
+        private Canvas GameCanvas { get; }
+
         #endregion
 
         #region Constructors
@@ -80,16 +82,31 @@ namespace Frogger.Controller
         /// </exception>
         public GameManager(Canvas gameCanvas)
         {
+            this.GameCanvas = gameCanvas;
+
             this.setupGameTimer(gameCanvas);
             this.setupLifeTimer();
-            this.PlayerManager = new PlayerManager();
+            this.PlayerManager = new PlayerManager(gameCanvas);
             this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
+
+            this.PlayerManager.AnimationOver += this.startGame;
+            this.PlayerManager.AnimationStarted += this.stopGame;
         }
 
         #endregion
 
         #region Methods
+
+        private void stopGame(object sender, EventArgs e)
+        {
+            this.timer.Stop();
+        }
+
+        private void startGame(object sender, EventArgs e)
+        {
+            this.timer.Start();
+        }
 
         /// <summary>
         ///     Occurs when [level updated].
@@ -116,28 +133,6 @@ namespace Frogger.Controller
         /// </summary>
         public event EventHandler GameOver;
 
-        private void setupGameTimer(Canvas gameCanvas)
-        {
-            this.timer = new DispatcherTimer();
-            this.timer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
-            this.timer.Interval = TimeSpan.FromMilliseconds(15);
-            this.timer.Start();
-        }
-
-        private void setupLifeTimer()
-        {
-            this.lifeDispatcherTimer = new DispatcherTimer();
-            this.lifeDispatcherTimer.Tick += this.lifeDispatcherTimerOnTick;
-            this.lifeDispatcherTimer.Interval = TimeSpan.FromSeconds(1);
-            this.lifeDispatcherTimer.Start();
-        }
-
-        private void lifeDispatcherTimerOnTick(object sender, object e)
-        {
-            this.TimeCountDown--;
-            this.onTimeOutChanged();
-        }
-
         /// <summary>
         ///     Initializes the game working with appropriate classes to place frog
         ///     and vehicle on game screen.
@@ -157,6 +152,27 @@ namespace Frogger.Controller
             this.createHomeLandingSPots(gameCanvas);
         }
 
+        /// <summary>
+        ///     Resets the game.
+        /// </summary>
+        /// <param name="gameCanvas">The game canvas.</param>
+        public void ResetGame(Canvas gameCanvas)
+        {
+            this.timer.Stop();
+            this.lifeDispatcherTimer.Stop();
+
+            this.laneManager.ClearLanesAndVehicles(gameCanvas);
+
+            this.unOccupyHomeLandingSpots();
+
+            this.resetGameStats();
+
+            this.timer.Start();
+            this.lifeDispatcherTimer.Start();
+
+            this.configureLevelParameters(gameCanvas);
+        }
+
         private void configureLevelParameters(Canvas gameCanvas)
         {
             switch (this.Level)
@@ -166,21 +182,21 @@ namespace Frogger.Controller
                     LaneManager.VehiclesPerLane = new[] { 2, 1, 3, 2, 4 };
 
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
-                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer();
                     break;
 
                 case 2:
                     LaneManager.LaneSpeeds = new[] { 0.3, 0.4, 0.5, 0.6, 0.7 };
                     LaneManager.VehiclesPerLane = new[] { 3, 2, 4, 3, 5 };
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
-                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer();
                     break;
 
                 case 3:
                     LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
-                    this.PlayerManager.CreateAndPlacePlayer(gameCanvas);
+                    this.PlayerManager.CreateAndPlacePlayer();
                     break;
             }
         }
@@ -241,6 +257,28 @@ namespace Frogger.Controller
             this.updateScore();
         }
 
+        private void setupGameTimer(Canvas gameCanvas)
+        {
+            this.timer = new DispatcherTimer();
+            this.timer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
+            this.timer.Interval = TimeSpan.FromMilliseconds(15);
+            this.timer.Start();
+        }
+
+        private void setupLifeTimer()
+        {
+            this.lifeDispatcherTimer = new DispatcherTimer();
+            this.lifeDispatcherTimer.Tick += this.lifeDispatcherTimerOnTick;
+            this.lifeDispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            this.lifeDispatcherTimer.Start();
+        }
+
+        private void lifeDispatcherTimerOnTick(object sender, object e)
+        {
+            this.TimeCountDown--;
+            this.onTimeOutChanged();
+        }
+
         private bool allHomeLandingSpotsOccupied()
         {
             foreach (var spot in this.homeLandingSpots)
@@ -277,10 +315,10 @@ namespace Frogger.Controller
 
         private async void handleCollision()
         {
+            this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
             this.Lives--;
             this.onLivesUpdated();
-            this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
         }
 
         private void updateScore()
@@ -379,27 +417,6 @@ namespace Frogger.Controller
             }
 
             this.onLivesUpdated();
-        }
-
-        /// <summary>
-        ///     Resets the game.
-        /// </summary>
-        /// <param name="gameCanvas">The game canvas.</param>
-        public void ResetGame(Canvas gameCanvas)
-        {
-            this.timer.Stop();
-            this.lifeDispatcherTimer.Stop();
-
-            this.laneManager.ClearLanesAndVehicles(gameCanvas);
-
-            this.unOccupyHomeLandingSpots();
-
-            this.resetGameStats();
-
-            this.timer.Start();
-            this.lifeDispatcherTimer.Start();
-
-            this.configureLevelParameters(gameCanvas);
         }
 
         private void unOccupyHomeLandingSpots()

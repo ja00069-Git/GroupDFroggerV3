@@ -11,7 +11,8 @@
 
     <Canvas>
         <Rectangle Fill="Black" Height="50" Width="60" />
-        <local:HomeSprite x:Name="homeSprite" Width="50" Height="50" Visibility="Collapsed" HorizontalAlignment="Left" Canvas.Left="5" VerticalAlignment="Center" />
+        <local:HomeSprite x:Name="homeSprite" Width="50" Height="50" Visibility="Collapsed" HorizontalAlignment="Left"
+                          Canvas.Left="5" VerticalAlignment="Center" />
     </Canvas>
 
 </local:BaseSprite>

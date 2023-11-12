@@ -74,9 +74,10 @@ namespace Frogger.Controller
                     vehicle = new Semi();
                     break;
                 case VehicleType.Tank:
-                    vehicle =new Tank();
+                    vehicle = new Tank();
                     break;
             }
+
             return vehicle;
         }
 

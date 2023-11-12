@@ -62,12 +62,13 @@ namespace Frogger.Model
         #endregion
     }
 
-
     /// <summary>
-    ///   Defines a tank ( a type of vehicle in the game )
+    ///     Defines a tank ( a type of vehicle in the game )
     /// </summary>
     public class Tank : Vehicle
     {
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Tank" /> class.
         /// </summary>
@@ -75,5 +76,7 @@ namespace Frogger.Model
         {
             Sprite = new TankSprite();
         }
+
+        #endregion
     }
 }
