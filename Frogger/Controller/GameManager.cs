@@ -419,6 +419,7 @@ namespace Frogger.Controller
             this.Level = 1;
             this.TimeCountDown = 20;
             this.onTimeOutChanged();
+            this.deactivatePowerUp();
         }
 
         #endregion
