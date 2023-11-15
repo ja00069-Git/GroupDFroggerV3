@@ -115,7 +115,6 @@ namespace Frogger.View
         private void OnGameOver(object sender, EventArgs e)
         {
             this.gameOverTextBlock.Visibility = Visibility.Visible;
-
             Frame.Navigate(typeof(HighScorePage));
         }
 

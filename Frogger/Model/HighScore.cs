@@ -21,7 +21,7 @@
         /// <value>
         ///     The score.
         /// </value>
-        public int Score { get; set; } = 0;
+        public int Score { get; set; }
 
         /// <summary>
         ///     Gets or sets the level completed.
@@ -29,7 +29,7 @@
         /// <value>
         ///     The level completed.
         /// </value>
-        public int LevelCompleted { get; set; } = 0;
+        public int LevelCompleted { get; set; }
 
         #endregion
 

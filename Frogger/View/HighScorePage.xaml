@@ -20,10 +20,10 @@
         <ListView 
             ItemsSource="{Binding Path= HighScores, Mode=TwoWay}"
             SelectedItem="{Binding Path=SelectedHighScore, Mode=TwoWay}"
-            BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="429" VerticalAlignment="Center" Width="372" Margin="268,0,0,0" >
+            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="344" VerticalAlignment="Top" Width="372" Margin="268,13,0,0" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="White" BorderThickness="1">
+                    <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -43,9 +43,11 @@
         <Button x:Name="submitBtn" Command="{Binding AddCommand, Mode=TwoWay}" Content="Add Score" Margin="10,103,0,0" VerticalAlignment="Top" Width="133" />
         <TextBox x:Name="playerName" Text="{Binding PlayerName, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
         <Button Command="{Binding RemoveCommand, Mode=TwoWay}" Content="Delete" Margin="10,160,0,0" VerticalAlignment="Top" Width="129"/>
-        <Button Content="sort by name" Margin="10,0,0,0" Width="129"/>
-        <Button Content="Sort by score" Margin="10,265,0,0" VerticalAlignment="Top" Width="129"/>
-        <Button Content="Sort by Level" Margin="10,326,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Margin="10,0,0,0" Width="129"/>
+        <Button Content="Sort by score" Command="{Binding SortByScoreCommand, Mode=TwoWay}" Margin="10,265,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Sort by Level" Command="{Binding SortByLevelCommand, Mode=TwoWay}" Margin="10,326,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Edit Name" Command="{Binding EditNameCommand, Mode=TwoWay}" Margin="10,391,0,0" VerticalAlignment="Top" Width="129"/>
+
     </Grid>
 
 </Page>

@@ -17,16 +17,6 @@ namespace Frogger.Controller
         /// </value>
         public IList<HighScore> Scores { get; }
 
-        /// <summary>
-        /// Gets the <see cref="HighScore"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="HighScore"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
-        public HighScore this[int index] => this.Scores[index];
-
         #endregion        
         /// <summary>
         /// Initializes a new instance of the <see cref="HighScoreBoard"/> class.

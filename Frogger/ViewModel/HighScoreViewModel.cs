@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 using Frogger.Command;
 using Frogger.Controller;
 using Frogger.Extensions;
@@ -25,14 +28,33 @@ namespace Frogger.ViewModel
 
         private ObservableCollection<HighScore> highScores;
 
-        /// <summary>
-        /// Player's name
-        /// </summary>
-        public string PlayerName { get; set; }
+        private HighScore selectedHighScore;
+
+        private readonly GamePage gamePage;
+
+        private string playerName;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        ///     Gets or sets the name of the player.
+        /// </summary>
+        /// <value>
+        ///     The name of the player.
+        /// </value>
+        public string PlayerName
+        {
+            get => this.playerName;
+            set
+            {
+                if (this.setField(ref this.playerName, value))
+                {
+                    this.OnPropertyChanged();
+                }
+            }
+        }
 
         /// <summary>
         ///     Gets or sets the high scores.
@@ -47,14 +69,11 @@ namespace Frogger.ViewModel
             }
         }
 
-        private HighScore selectedHighScore;
-        private readonly GamePage gamePage;
-
         /// <summary>
-        /// Gets or sets the selected high score.
+        ///     Gets or sets the selected high score.
         /// </summary>
         /// <value>
-        /// The selected high score.
+        ///     The selected high score.
         /// </value>
         public HighScore SelectedHighScore
         {
@@ -64,25 +83,57 @@ namespace Frogger.ViewModel
                 this.selectedHighScore = value;
                 this.OnPropertyChanged();
                 this.RemoveCommand.OnCanExecuteChanged();
+                this.EditNameCommand.OnCanExecuteChanged();
             }
         }
 
         /// <summary>
-        /// Gets or sets the remove command.
+        ///     Gets or sets the remove command.
         /// </summary>
         /// <value>
-        /// The remove command.
+        ///     The remove command.
         /// </value>
         public RelayCommand RemoveCommand { get; set; }
 
         /// <summary>
-        /// Gets or sets the add command.
+        ///     Gets or sets the add command.
         /// </summary>
         /// <value>
-        /// The add command.
+        ///     The add command.
         /// </value>
         public RelayCommand AddCommand { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the sort by score command.
+        /// </summary>
+        /// <value>
+        ///     The sort by score command.
+        /// </value>
+        public RelayCommand SortByScoreCommand { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the sort by name command.
+        /// </summary>
+        /// <value>
+        ///     The sort by name command.
+        /// </value>
+        public RelayCommand SortByNameCommand { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the sort by level command.
+        /// </summary>
+        /// <value>
+        ///     The sort by level command.
+        /// </value>
+        public RelayCommand SortByLevelCommand { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the edit name command.
+        /// </summary>
+        /// <value>
+        ///     The edit name command.
+        /// </value>
+        public RelayCommand EditNameCommand { get; set; }
 
         #endregion
 
@@ -96,14 +147,29 @@ namespace Frogger.ViewModel
             this.gamePage = new GamePage();
             this.scoreBoard = new HighScoreBoard();
             this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
+
             this.loadCommand();
             this.loadHighScores();
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Occurs when a property value changes.
+        /// </summary>
+        /// <returns></returns>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void loadCommand()
         {
             this.RemoveCommand = new RelayCommand(this.removeScore, this.canRemoveScore);
             this.AddCommand = new RelayCommand(this.addScore, this.canAddScore);
+            this.SortByScoreCommand = new RelayCommand(this.sortByScore, this.canSort);
+            this.SortByNameCommand = new RelayCommand(this.sortByName, this.canSort);
+            this.SortByLevelCommand = new RelayCommand(this.sortByLevel, this.canSort);
+            this.EditNameCommand = new RelayCommand(this.editName, this.canEditName);
         }
 
         private bool canAddScore(object obj)
@@ -113,7 +179,7 @@ namespace Frogger.ViewModel
 
         private void addScore(object obj)
         {
-            HighScore highScore = new HighScore
+            var highScore = new HighScore
             {
                 PlayerName = this.PlayerName,
                 Score = this.gamePage.GameManager.Score,
@@ -123,7 +189,10 @@ namespace Frogger.ViewModel
             this.scoreBoard.Scores.Add(highScore);
 
             this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
-
+            this.SortByScoreCommand.OnCanExecuteChanged();
+            this.SortByLevelCommand.OnCanExecuteChanged();
+            this.SortByNameCommand.OnCanExecuteChanged();
+            this.PlayerName = string.Empty;
             this.saveHighScores();
         }
 
@@ -138,16 +207,55 @@ namespace Frogger.ViewModel
             this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
         }
 
-        #endregion
+        private void sortByScore(object obj)
+        {
+            this.HighScores = new ObservableCollection<HighScore>(this.HighScores.OrderByDescending(highScore => highScore.Score));
+        }
 
-        #region Methods
+        private void sortByName(object obj)
+        {
+            this.HighScores = new ObservableCollection<HighScore>(this.HighScores.OrderBy(highScore => highScore.PlayerName));
+        }
 
-        /// <summary>
-        ///     Occurs when a property value changes.
-        /// </summary>
-        /// <returns></returns>
-        public event PropertyChangedEventHandler PropertyChanged;
-      
+        private void sortByLevel(object obj)
+        {
+            this.HighScores =
+                new ObservableCollection<HighScore>(this.HighScores.OrderByDescending(highScore => highScore.LevelCompleted));
+        }
+
+        private bool canSort(object obj)
+        {
+            return this.HighScores.Any();
+        }
+
+        private bool canEditName(object obj)
+        {
+            return this.selectedHighScore != null;
+        }
+
+        private async void editName(object obj)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Edit Player Name",
+                Content = "Enter the new name:",
+                PrimaryButtonText = "Save",
+                SecondaryButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary
+            };
+
+            var textBox = new TextBox();
+            dialog.Content = textBox;
+
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                this.SelectedHighScore.PlayerName = textBox.Text;
+
+                this.saveHighScores();
+
+                this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
+            }
+        }
 
         /// <summary>
         ///     Saves the high scores.

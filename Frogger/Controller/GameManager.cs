@@ -87,6 +87,7 @@ namespace Frogger.Controller
             this.soundEffects = new SoundEffects();
         }
 
+
         #endregion
 
         #region Methods
