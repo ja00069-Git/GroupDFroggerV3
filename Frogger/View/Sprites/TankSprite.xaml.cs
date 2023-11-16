@@ -4,13 +4,14 @@
 
 namespace Frogger.View.Sprites
 {
-
     /// <summary>
     ///     Draws a semi sprite
     /// </summary>
     /// <seealso cref="Frogger.View.Sprites.BaseSprite" />
     public sealed partial class TankSprite
     {
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="TankSprite" /> class.
         /// </summary>
@@ -18,5 +19,7 @@ namespace Frogger.View.Sprites
         {
             this.InitializeComponent();
         }
+
+        #endregion
     }
 }

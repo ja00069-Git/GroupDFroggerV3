@@ -2,24 +2,21 @@
 
 namespace Frogger.View.Sprites
 {
+
     /// <summary>
-    ///     Player home landing spot
+    ///     Draws the PowerUpSprite
     /// </summary>
     /// <seealso cref="Frogger.View.Sprites.BaseSprite" />
     /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector" />
     /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
-    public sealed partial class HomeLandingSpotSprite
+    public sealed partial class PowerUpSprite
     {
-        #region Constructors
-
         /// <summary>
-        ///     Initializes a new instance of the <see cref="HomeLandingSpotSprite" /> class.
+        ///     Initializes a new instance of the <see cref="PowerUpSprite" /> class.
         /// </summary>
-        public HomeLandingSpotSprite()
+        public PowerUpSprite()
         {
             this.InitializeComponent();
         }
-
-        #endregion
     }
 }
