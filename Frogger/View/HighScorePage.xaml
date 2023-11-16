@@ -1,0 +1,53 @@
+﻿<Page
+    x:Class="Frogger.View.HighScorePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="using:Frogger.ViewModel"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <viewModel:HighScoreViewModel/>
+    </Page.DataContext>
+
+    <Grid  
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}">
+        <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Enter your name:"
+               VerticalAlignment="Top" />
+
+        <ListView 
+            ItemsSource="{Binding Path= HighScores, Mode=TwoWay}"
+            SelectedItem="{Binding Path=SelectedHighScore, Mode=TwoWay}"
+            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="344" VerticalAlignment="Top" Width="372" Margin="268,13,0,0" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock HorizontalAlignment="Stretch" Grid.Row="0" 
+                                   Text="{Binding Score}" />
+                            <TextBlock Grid.Row="1" Text="{Binding PlayerName}" />
+                            <TextBlock Grid.Row="2" Text="{Binding LevelCompleted}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+        <Button x:Name="submitBtn" Command="{Binding AddCommand, Mode=TwoWay}" Content="Add Score" Margin="10,103,0,0" VerticalAlignment="Top" Width="133" />
+        <TextBox x:Name="playerName" Text="{Binding PlayerName, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
+        <Button Command="{Binding RemoveCommand, Mode=TwoWay}" Content="Delete" Margin="10,160,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Margin="10,0,0,0" Width="129"/>
+        <Button Content="Sort by score" Command="{Binding SortByScoreCommand, Mode=TwoWay}" Margin="10,265,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Sort by Level" Command="{Binding SortByLevelCommand, Mode=TwoWay}" Margin="10,326,0,0" VerticalAlignment="Top" Width="129"/>
+        <Button Content="Edit Name" Command="{Binding EditNameCommand, Mode=TwoWay}" Margin="10,391,0,0" VerticalAlignment="Top" Width="129"/>
+
+    </Grid>
+
+</Page>

@@ -121,13 +121,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Controller\GameManager.cs" />
+    <Compile Include="Controller\HighScoreBoard.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Controller\LaneManager.cs" />
     <Compile Include="Controller\PlayerManager.cs" />
     <Compile Include="Controller\SoundEffects.cs" />
     <Compile Include="Controller\VehicleManager.cs" />
     <Compile Include="Model\Frog.cs" />
     <Compile Include="Model\GameObject.cs" />
+    <Compile Include="Model\HighScore.cs" />
     <Compile Include="Model\HomeLandingSpot.cs" />
     <Compile Include="Model\Lane.cs" />
     <Compile Include="Model\PowerUp.cs" />
@@ -137,6 +142,9 @@
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\HighScorePage.xaml.cs">
+      <DependentUpon>HighScorePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
     </Compile>
@@ -207,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\HighScorePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Sprites\BaseSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -263,6 +275,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

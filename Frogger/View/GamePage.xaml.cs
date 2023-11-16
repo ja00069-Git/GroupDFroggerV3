@@ -19,11 +19,17 @@ namespace Frogger.View
 
         private readonly double applicationHeight = (double)Application.Current.Resources["AppHeight"];
         private readonly double applicationWidth = (double)Application.Current.Resources["AppWidth"];
-        private readonly GameManager gameManager;
 
         #endregion
 
-        #region Properties
+        #region Properties        
+        /// <summary>
+        /// Gets the game manager.
+        /// </summary>
+        /// <value>
+        /// The game manager.
+        /// </value>
+        public GameManager GameManager { get; }
 
         /// <summary>
         ///     Gets or sets the lives.
@@ -39,7 +45,7 @@ namespace Frogger.View
         /// <value>
         ///     The score.
         /// </value>
-        private int Score => int.TryParse(this.score.Text, out var currentScore) ? currentScore : 0;
+        public int Score => int.TryParse(this.score.Text, out var currentScore) ? currentScore : 0;
 
         /// <summary>
         ///     Gets or sets the timer.
@@ -55,7 +61,7 @@ namespace Frogger.View
         /// <value>
         ///     The level.
         /// </value>
-        private int Level => int.TryParse(this.level.Text, out var currLevel) ? currLevel : 0;
+        public int Level => int.TryParse(this.level.Text, out var currLevel) ? currLevel : 0;
 
         #endregion
 
@@ -76,7 +82,7 @@ namespace Frogger.View
 
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
 
-            this.gameManager = new GameManager(this.canvas)
+            this.GameManager = new GameManager(this.canvas)
             {
                 Lives = this.Lives,
                 Score = this.Score,
@@ -84,12 +90,12 @@ namespace Frogger.View
                 Level = this.Level
             };
 
-            this.gameManager.InitializeGame(this.canvas);
-            this.gameManager.LivesUpdated += this.livesUpdated;
-            this.gameManager.ScoreUpdated += this.scoreUpdated;
-            this.gameManager.GameOver += this.OnGameOver;
-            this.gameManager.TimeOut += this.decrementTime;
-            this.gameManager.LevelUpdated += this.onLevelUpdated;
+            this.GameManager.InitializeGame(this.canvas);
+            this.GameManager.LivesUpdated += this.livesUpdated;
+            this.GameManager.ScoreUpdated += this.scoreUpdated;
+            this.GameManager.GameOver += this.OnGameOver;
+            this.GameManager.TimeOut += this.decrementTime;
+            this.GameManager.LevelUpdated += this.onLevelUpdated;
         }
 
         #endregion
@@ -109,6 +115,7 @@ namespace Frogger.View
         private void OnGameOver(object sender, EventArgs e)
         {
             this.gameOverTextBlock.Visibility = Visibility.Visible;
+            Frame.Navigate(typeof(HighScorePage));
         }
 
         private void scoreUpdated(object sender, EventArgs e)
@@ -126,25 +133,25 @@ namespace Frogger.View
             switch (args.VirtualKey)
             {
                 case VirtualKey.Left:
-                    this.gameManager.PlayerManager.MovePlayerLeft();
+                    this.GameManager.PlayerManager.MovePlayerLeft();
                     break;
                 case VirtualKey.Right:
-                    this.gameManager.PlayerManager.MovePlayerRight();
+                    this.GameManager.PlayerManager.MovePlayerRight();
                     break;
                 case VirtualKey.Up:
-                    this.gameManager.PlayerManager.MovePlayerUp();
+                    this.GameManager.PlayerManager.MovePlayerUp();
                     break;
                 case VirtualKey.Down:
-                    this.gameManager.PlayerManager.MovePlayerDown();
+                    this.GameManager.PlayerManager.MovePlayerDown();
                     break;
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.gameManager.ResetGame(this.canvas);
+            this.GameManager.ResetGame(this.canvas);
             this.gameOverTextBlock.Visibility = Visibility.Collapsed;
-            this.onLevelUpdated(this.gameManager, EventArgs.Empty);
+            this.onLevelUpdated(this.GameManager, EventArgs.Empty);
         }
 
         #endregion
