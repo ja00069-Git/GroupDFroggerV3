@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
+using Frogger.View.Sprites;
 
 namespace Frogger.Controller
 {
@@ -18,6 +19,7 @@ namespace Frogger.Controller
         private DispatcherTimer lifeDispatcherTimer;
 
         private readonly LaneManager laneManager;
+        private readonly BonusTimeManager bonusTimeManager;
 
         private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
         private readonly SoundEffects soundEffects;
@@ -91,6 +93,7 @@ namespace Frogger.Controller
             this.PlayerManager = new PlayerManager(gameCanvas);
             this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
+            this.bonusTimeManager = new BonusTimeManager(gameCanvas);
 
             this.PlayerManager.AnimationOver += this.startGame;
             this.PlayerManager.AnimationStarted += this.stopGame;
@@ -117,11 +120,6 @@ namespace Frogger.Controller
         public event EventHandler LevelUpdated;
 
         /// <summary>
-        ///     Occurs when [time out].
-        /// </summary>
-        public event EventHandler TimeOut;
-
-        /// <summary>
         ///     Event Occurs when [lives updated].
         /// </summary>
         public event EventHandler LivesUpdated;
@@ -130,6 +128,11 @@ namespace Frogger.Controller
         ///     Event Occurs when [score updated].
         /// </summary>
         public event EventHandler ScoreUpdated;
+
+        /// <summary>
+        ///     Occurs when [time out].
+        /// </summary>
+        public event EventHandler TimeOut;
 
         /// <summary>
         ///     Event Occurs when [game over].
@@ -153,6 +156,7 @@ namespace Frogger.Controller
 
             this.configureLevelParameters(gameCanvas);
             this.createHomeLandingSPots(gameCanvas);
+            this.bonusTimeManager.PlaceBonusTimeSprite();
         }
 
         /// <summary>

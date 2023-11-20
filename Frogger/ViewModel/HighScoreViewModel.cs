@@ -25,18 +25,13 @@ namespace Frogger.ViewModel
         #region Data members
 
         private readonly HighScoreBoard scoreBoard;
-
-        private ObservableCollection<HighScore> highScores;
-
-        private HighScore selectedHighScore;
-
         private readonly GamePage gamePage;
-
-        private string playerName;
 
         #endregion
 
         #region Properties
+
+        private string playerName;
 
         /// <summary>
         ///     Gets or sets the name of the player.
@@ -56,6 +51,8 @@ namespace Frogger.ViewModel
             }
         }
 
+        private ObservableCollection<HighScore> highScores;
+
         /// <summary>
         ///     Gets or sets the high scores.
         /// </summary>
@@ -68,6 +65,8 @@ namespace Frogger.ViewModel
                 this.OnPropertyChanged();
             }
         }
+
+        private HighScore selectedHighScore;
 
         /// <summary>
         ///     Gets or sets the selected high score.

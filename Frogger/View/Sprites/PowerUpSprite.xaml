@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <SolidColorBrush x:Key="MainColor" Color="Red" />
         <SolidColorBrush x:Key="SecondaryColor" Color="AntiqueWhite" />
-        <SolidColorBrush x:Key="Branch" Color="AntiqueWhite"></SolidColorBrush>
+        <SolidColorBrush x:Key="Branch" Color="AntiqueWhite"/>
     </UserControl.Resources>
 
     <Canvas>

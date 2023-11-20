@@ -8,14 +8,25 @@ namespace Frogger.Controller
     /// </summary>
     public class HighScoreBoard
     {
-        #region Data members        
+        #region Data members    
+        
+        private IList<HighScore> scores;
+
         /// <summary>
         /// Gets the scores.
         /// </summary>
         /// <value>
         /// The scores.
         /// </value>
-        public IList<HighScore> Scores { get; }
+        public IList<HighScore> Scores => this.scores;
+
+        /// <summary>Gets the <see cref="HighScore" /> at the specified index.</summary>
+        /// <param name="index">The index.</param>
+        /// <value>The <see cref="HighScore" />.</value>
+        /// <returns>
+        ///   The HighScore for the specified index
+        /// </returns>
+        public HighScore this[int index] => this.scores[index];
 
         #endregion        
         /// <summary>
@@ -23,7 +34,7 @@ namespace Frogger.Controller
         /// </summary>
         public HighScoreBoard()
         {
-            this.Scores = new List<HighScore>();
+            this.scores = new List<HighScore>();
         }
 
         /// <summary>

@@ -20,7 +20,7 @@
         <ListView 
             ItemsSource="{Binding Path= HighScores, Mode=TwoWay}"
             SelectedItem="{Binding Path=SelectedHighScore, Mode=TwoWay}"
-            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="344" VerticalAlignment="Top" Width="372" Margin="268,13,0,0" >
+            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="344" VerticalAlignment="Top" Width="372" Margin="223,64,0,0" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">
@@ -30,8 +30,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Stretch" Grid.Row="0" 
-                                   Text="{Binding Score}" />
+                            <TextBlock Text="{Binding Score}" HorizontalAlignment="Stretch" Grid.Row="0" />
                             <TextBlock Grid.Row="1" Text="{Binding PlayerName}" />
                             <TextBlock Grid.Row="2" Text="{Binding LevelCompleted}"/>
                         </Grid>

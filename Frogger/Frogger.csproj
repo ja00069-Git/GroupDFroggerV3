@@ -122,9 +122,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Controller\BonusTimeManager.cs" />
     <Compile Include="Controller\GameManager.cs" />
     <Compile Include="Controller\HighScoreBoard.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Model\BonusTimePowerUp.cs" />
     <Compile Include="ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Controller\LaneManager.cs" />
     <Compile Include="Controller\PlayerManager.cs" />
@@ -148,7 +150,7 @@
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\CarSprite.xaml.cs">
+    <Compile Include="View\Sprites\Vehicles\CarSprite.xaml.cs">
       <DependentUpon>CarSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\DeathAnimationSprites\DeathSpriteFrame1.xaml.cs">
@@ -179,10 +181,10 @@
     <Compile Include="View\Sprites\PowerUpSprite.xaml.cs">
       <DependentUpon>PowerUpSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\SemiSprite.xaml.cs">
+    <Compile Include="View\Sprites\Vehicles\SemiSprite.xaml.cs">
       <DependentUpon>SemiSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Sprites\TankSprite.xaml.cs">
+    <Compile Include="View\Sprites\Vehicles\TankSprite.xaml.cs">
       <DependentUpon>TankSprite.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -223,7 +225,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\CarSprite.xaml">
+    <Page Include="View\Sprites\Vehicles\CarSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -263,11 +265,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\SemiSprite.xaml">
+    <Page Include="View\Sprites\Vehicles\SemiSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Sprites\TankSprite.xaml">
+    <Page Include="View\Sprites\Vehicles\TankSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
