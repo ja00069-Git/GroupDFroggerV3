@@ -25,6 +25,7 @@ namespace Frogger.Controller
         private readonly SoundEffects soundEffects;
         private readonly PowerUp powerUp = new PowerUp();
         private int homeLandingCount;
+        private bool canAddBonus = true;
 
         #endregion
 
@@ -195,6 +196,8 @@ namespace Frogger.Controller
 
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
+                    this.canAddBonus = true;
+                    this.bonusTimeManager.EnableSprite();
                     break;
 
                 case 2:
@@ -202,6 +205,8 @@ namespace Frogger.Controller
                     LaneManager.VehiclesPerLane = new[] { 3, 2, 4, 3, 5 };
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
+                    this.canAddBonus = true;
+                    this.bonusTimeManager.EnableSprite();
                     break;
 
                 case 3:
@@ -209,6 +214,8 @@ namespace Frogger.Controller
                     LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
                     this.laneManager.CreateAndPlaceLanes(gameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
+                    this.canAddBonus = true;
+                    this.bonusTimeManager.EnableSprite();
                     break;
             }
         }
@@ -263,8 +270,22 @@ namespace Frogger.Controller
                 }
             }
 
+            this.checkCollisionWithMushroom();
+
             this.moveVehicle();
             this.updateScore();
+        }
+
+        private void checkCollisionWithMushroom()
+        {
+            if (this.bonusTimeManager.CheckPlayerCollision(this.PlayerManager.Player) & this.canAddBonus)
+            {
+                this.timer.Stop();
+                this.canAddBonus = false;
+                this.bonusTimeManager.DisableSprite();
+                this.TimeCountDown += this.bonusTimeManager.BonusInSec;
+                this.timer.Start();
+            }
         }
 
         private void gameOver()

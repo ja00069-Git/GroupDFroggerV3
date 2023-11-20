@@ -52,6 +52,24 @@ namespace Frogger.Controller
             this.BonusTime.Y = this.randomY();
         }
 
+
+        /// <summary>Disables the sprite.</summary>
+        public void DisableSprite()
+        {
+            this.repositionBonusTimeSpriteTimer.Stop();
+            this.BonusTime.Sprite.IsEnabled = false;
+            this.BonusTime.Sprite.Visibility = Visibility.Collapsed;
+        }
+
+
+        /// <summary>Enables the sprite.</summary>
+        public void EnableSprite()
+        {
+            this.repositionBonusTimeSpriteTimer.Start();
+            this.BonusTime.Sprite.IsEnabled = true;
+            this.BonusTime.Sprite.Visibility = Visibility.Visible;
+        }
+
         /// <summary>Checks the player collision.</summary>
         /// <param name="obj">The object.</param>
         /// <returns>
