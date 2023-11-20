@@ -12,7 +12,7 @@
         <viewModel:HighScoreViewModel/>
     </Page.DataContext>
 
-    <Grid  
+    <Canvas  
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}">
         <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" Text="Enter your name:"
                VerticalAlignment="Top" />
@@ -43,11 +43,11 @@
         <Button x:Name="submitBtn" Command="{Binding AddCommand, Mode=TwoWay}" Content="Add Score" Margin="10,103,0,0" VerticalAlignment="Top" Width="133" />
         <TextBox x:Name="playerName" Text="{Binding PlayerName, Mode=TwoWay}"  HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="133"/>
         <Button Command="{Binding RemoveCommand, Mode=TwoWay}" Content="Delete" Margin="10,160,0,0" VerticalAlignment="Top" Width="129"/>
-        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Margin="10,0,0,0" Width="129"/>
+        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Width="129" Canvas.Left="10" Canvas.Top="209" VerticalAlignment="Top"/>
         <Button Content="Sort by score" Command="{Binding SortByScoreCommand, Mode=TwoWay}" Margin="10,265,0,0" VerticalAlignment="Top" Width="129"/>
         <Button Content="Sort by Level" Command="{Binding SortByLevelCommand, Mode=TwoWay}" Margin="10,326,0,0" VerticalAlignment="Top" Width="129"/>
         <Button Content="Edit Name" Command="{Binding EditNameCommand, Mode=TwoWay}" Margin="10,391,0,0" VerticalAlignment="Top" Width="129"/>
-
-    </Grid>
+        <Button Content="Back" VerticalAlignment="Top" Width="129" Canvas.Left="389" Canvas.Top="391" Click="Button_Click"/>
+    </Canvas>
 
 </Page>

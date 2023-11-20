@@ -317,11 +317,11 @@ namespace Frogger.Controller
         }
 
         private async void handleCollision()
-        {
-            this.PlayerManager.HandleDeath();
+        { 
             await this.soundEffects.DyingSound();
             this.Lives--;
             this.onLivesUpdated();
+            this.TimeCountDown = 20;
         }
 
         private void updateScore()
