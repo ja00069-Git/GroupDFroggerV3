@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -176,6 +177,7 @@ namespace Frogger.Controller
             if (this.Player.X > 0)
             {
                 this.Player.MoveLeft();
+                this.turnSpriteLeft();
             }
         }
 
@@ -189,6 +191,7 @@ namespace Frogger.Controller
             if (this.Player.X + this.Player.Width < this.backgroundWidth)
             {
                 this.Player.MoveRight();
+                this.turnSpriteRight();
             }
         }
 
@@ -203,6 +206,7 @@ namespace Frogger.Controller
             {
                 //this.Player.changeSprite(1);
                 this.Player.MoveUp();
+                this.turnSpriteUp();
             }
         }
 
@@ -215,8 +219,53 @@ namespace Frogger.Controller
         {
             if (this.Player.Y < (double)Application.Current.Resources["LowShoulderYLocation"])
             {
+                this.turnSpriteDown();
                 this.Player.MoveDown();
             }
+        }
+
+        private void turnSpriteDown()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 180;
+        }
+
+        private void turnSpriteUp()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 360;
+        }
+
+        private void turnSpriteLeft()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = -90;
+        }
+
+        private void turnSpriteRight()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 90;
         }
 
         #endregion
