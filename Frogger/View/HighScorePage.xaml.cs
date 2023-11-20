@@ -23,5 +23,10 @@ namespace Frogger.View
         }
 
         #endregion
+
+        private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(GamePage));
+        }
     }
 }
