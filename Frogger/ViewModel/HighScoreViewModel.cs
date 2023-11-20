@@ -67,8 +67,8 @@ namespace Frogger.ViewModel
             }
         }
 
-        private HighScore selectedHighScore;
         private HighScore highScore;
+        private HighScore selectedHighScore;
 
         /// <summary>
         ///     Gets or sets the selected high score.
@@ -187,13 +187,7 @@ namespace Frogger.ViewModel
 
         private void addScore(object obj)
         {
-            //var highScore = new HighScore
-            //{
-            //    PlayerName = this.PlayerName,
-            //    Score = this.highScore.Score,
-            //    LevelCompleted = this.highScore.LevelCompleted
-            //};
-
+            
             this.highScore.PlayerName = this.PlayerName;
             this.scoreBoard.AddScore(this.highScore);
 
@@ -262,7 +256,10 @@ namespace Frogger.ViewModel
 
             if (await dialog.ShowAsync() == ContentDialogResult.Primary)
             {
-                this.SelectedHighScore.PlayerName = textBox.Text;
+                
+                var name = textBox.Text;
+
+                this.scoreBoard.EditName(this.selectedHighScore, name);
 
                 this.updateListView();
             }

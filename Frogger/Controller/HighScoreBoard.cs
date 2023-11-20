@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -89,6 +90,18 @@ namespace Frogger.Controller
             {
                 this.scores = new ObservableCollection<HighScore>();
             }
+        }
+
+
+        /// <summary>Edits the name.</summary>
+        /// <param name="selectedHighScore">The selected high score.</param>
+        /// <param name="name">The name.</param>
+        public void EditName(HighScore selectedHighScore, string name)
+        {
+            var index = this.Scores.IndexOf(selectedHighScore);
+            this.scores[index].PlayerName = name;
+
+            this.saveHighScores();
         }
     }
 }
