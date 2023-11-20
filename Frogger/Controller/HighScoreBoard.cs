@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 using Frogger.Model;
+using Windows.Storage;
 
 namespace Frogger.Controller
 {
@@ -35,6 +40,17 @@ namespace Frogger.Controller
         public HighScoreBoard()
         {
             this.scores = new List<HighScore>();
+
+            this.loadHighScores();
+        }
+
+
+        /// <summary>Adds the score.</summary>
+        /// <param name="highScore">The high score.</param>
+        public void AddScore(HighScore highScore)
+        {
+            this.scores.Add(highScore);
+            this.saveHighScores();
         }
 
         /// <summary>
@@ -43,8 +59,36 @@ namespace Frogger.Controller
         /// <param name="highScore">The high score.</param>
         /// <returns></returns>
         public bool Remove(HighScore highScore)
+        {   
+            var wasRemoved = this.Scores.Remove(highScore);
+            this.saveHighScores();
+            return wasRemoved;
+        }
+
+        private void saveHighScores()
         {
-            return this.Scores.Remove(highScore);
+            var localFolder = ApplicationData.Current.LocalFolder;
+
+            var json = JsonSerializer.Serialize(this.Scores);
+            var filePath = Path.Combine(localFolder.Path, "highScores.json");
+
+            File.WriteAllText(filePath, json);
+        }
+
+        private void loadHighScores()
+        {
+            try
+            {
+                var localFolder = ApplicationData.Current.LocalFolder;
+                var filePath = Path.Combine(localFolder.Path, "highScores.json");
+
+                var json = File.ReadAllText(filePath);
+                this.scores = JsonSerializer.Deserialize<ObservableCollection<HighScore>>(json);
+            }
+            catch (FileNotFoundException)
+            {
+                this.scores = new ObservableCollection<HighScore>();
+            }
         }
     }
 }

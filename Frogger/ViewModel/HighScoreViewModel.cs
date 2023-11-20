@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -67,6 +68,7 @@ namespace Frogger.ViewModel
         }
 
         private HighScore selectedHighScore;
+        private HighScore highScore;
 
         /// <summary>
         ///     Gets or sets the selected high score.
@@ -145,10 +147,17 @@ namespace Frogger.ViewModel
         {
             this.gamePage = new GamePage();
             this.scoreBoard = new HighScoreBoard();
-            this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
-
+            this.updateListView();
             this.loadCommand();
-            this.loadHighScores();
+            this.highScore = new HighScore();
+
+            GameManager.GameOverVm += this.onGameOver;
+        }
+
+        private void onGameOver(object sender, GameOverVmEventArgs e)
+        {
+            this.highScore.Score = e.Score;
+            this.highScore.LevelCompleted = e.Level;
         }
 
         #endregion
@@ -178,21 +187,26 @@ namespace Frogger.ViewModel
 
         private void addScore(object obj)
         {
-            var highScore = new HighScore
-            {
-                PlayerName = this.PlayerName,
-                Score = this.gamePage.GameManager.Score,
-                LevelCompleted = this.gamePage.GameManager.Level
-            };
+            //var highScore = new HighScore
+            //{
+            //    PlayerName = this.PlayerName,
+            //    Score = this.highScore.Score,
+            //    LevelCompleted = this.highScore.LevelCompleted
+            //};
 
-            this.scoreBoard.Scores.Add(highScore);
+            this.highScore.PlayerName = this.PlayerName;
+            this.scoreBoard.AddScore(this.highScore);
 
-            this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
+            this.updateListView();
             this.SortByScoreCommand.OnCanExecuteChanged();
             this.SortByLevelCommand.OnCanExecuteChanged();
             this.SortByNameCommand.OnCanExecuteChanged();
             this.PlayerName = string.Empty;
-            this.saveHighScores();
+        }
+
+        private void updateListView()
+        {
+            this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
         }
 
         private bool canRemoveScore(object obj)
@@ -203,7 +217,7 @@ namespace Frogger.ViewModel
         private void removeScore(object obj)
         {
             this.scoreBoard.Remove(this.selectedHighScore);
-            this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
+            this.updateListView();
         }
 
         private void sortByScore(object obj)
@@ -250,35 +264,7 @@ namespace Frogger.ViewModel
             {
                 this.SelectedHighScore.PlayerName = textBox.Text;
 
-                this.saveHighScores();
-
-                this.HighScores = this.scoreBoard.Scores.ToObservableCollection();
-            }
-        }
-
-        /// <summary>
-        ///     Saves the high scores.
-        /// </summary>
-        private void saveHighScores()
-        {
-            var localFolder = ApplicationData.Current.LocalFolder;
-
-            var json = JsonSerializer.Serialize(this.HighScores);
-            var filePath = Path.Combine(localFolder.Path, "highScores.json");
-
-            File.WriteAllText(filePath, json);
-        }
-
-        private void loadHighScores()
-        {
-            try
-            {
-                var json = File.ReadAllText("highScores.json");
-                this.HighScores = JsonSerializer.Deserialize<ObservableCollection<HighScore>>(json);
-            }
-            catch (FileNotFoundException)
-            {
-                this.HighScores = new ObservableCollection<HighScore>();
+                this.updateListView();
             }
         }
 

@@ -139,6 +139,11 @@ namespace Frogger.Controller
         /// </summary>
         public event EventHandler GameOver;
 
+
+        /// <summary>Occurs when [game over vm].</summary>
+        public static event EventHandler<GameOverVmEventArgs> GameOverVm;
+
+
         /// <summary>
         ///     Initializes the game working with appropriate classes to place frog
         ///     and vehicle on game screen.
@@ -230,10 +235,8 @@ namespace Frogger.Controller
         {
             if (this.Lives <= 0)
             {
-                this.GameOver?.Invoke(this, EventArgs.Empty);
                 await this.soundEffects.GameOverSound();
-                this.timer.Stop();
-                this.lifeDispatcherTimer.Stop();
+                this.gameOver();
             }
             else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
             {
@@ -262,6 +265,20 @@ namespace Frogger.Controller
 
             this.moveVehicle();
             this.updateScore();
+        }
+
+        private void gameOver()
+        {
+            var args = new GameOverVmEventArgs
+            {
+                Score = this.Score,
+                Level = this.Level
+            };
+
+            this.timer.Stop();
+            this.lifeDispatcherTimer.Stop();
+            this.GameOver?.Invoke(this, EventArgs.Empty);
+            GameOverVm?.Invoke(this, args);
         }
 
         private void setupGameTimer(Canvas gameCanvas)
@@ -448,5 +465,22 @@ namespace Frogger.Controller
         }
 
         #endregion
+    }
+
+
+    /// <summary>
+    ///   Defines the arguments for the View Model Game Over Event
+    /// </summary>
+    public class GameOverVmEventArgs : EventArgs
+    {
+
+        /// <summary>Gets or sets the score.</summary>
+        /// <value>The score.</value>
+        public int Score { get; set; }
+
+
+        /// <summary>Gets or sets the level.</summary>
+        /// <value>The level.</value>
+        public int Level { get; set; }
     }
 }
