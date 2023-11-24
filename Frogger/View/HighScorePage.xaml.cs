@@ -2,6 +2,7 @@
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Frogger.View
@@ -27,6 +28,11 @@ namespace Frogger.View
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Frame.Navigate(typeof(GamePage));
+        }
+
+        private void Start_Screen(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(StartPage));
         }
     }
 }

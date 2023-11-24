@@ -20,7 +20,7 @@
         <ListView 
             ItemsSource="{Binding Path= HighScores, Mode=TwoWay}"
             SelectedItem="{Binding Path=SelectedHighScore, Mode=TwoWay}"
-            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="344" VerticalAlignment="Top" Width="372" Margin="223,64,0,0" >
+            BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="296" VerticalAlignment="Top" Width="332" Canvas.Left="218" Canvas.Top="47" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">
@@ -46,7 +46,8 @@
         <Button Content="Sort by score" Command="{Binding SortByScoreCommand, Mode=TwoWay}" Margin="10,265,0,0" VerticalAlignment="Top" Width="129"/>
         <Button Content="Sort by Level" Command="{Binding SortByLevelCommand, Mode=TwoWay}" Margin="10,326,0,0" VerticalAlignment="Top" Width="129"/>
         <Button Content="Edit Name" Command="{Binding EditNameCommand, Mode=TwoWay}" Margin="10,391,0,0" VerticalAlignment="Top" Width="129"/>
-        <Button Content="Back" VerticalAlignment="Top" Width="129" Canvas.Left="389" Canvas.Top="391" Click="Button_Click"/>
+        <Button Content="Play Again" Width="129" Canvas.Left="236" Canvas.Top="391" Click="Button_Click"/>
+        <Button Content="Start Screen" Width="129" Canvas.Left="461" Canvas.Top="391" Click="Start_Screen" VerticalAlignment="Top"/>
     </Canvas>
 
 </Page>

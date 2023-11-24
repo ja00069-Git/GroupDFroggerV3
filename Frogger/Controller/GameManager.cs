@@ -77,14 +77,9 @@ namespace Frogger.Controller
 
         #region Constructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="GameManager" /> class.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     backgroundHeight &lt;= 0
-        ///     or
-        ///     backgroundWidth &lt;= 0
-        /// </exception>
+
+        /// <summary>Initializes a new instance of the <see cref="GameManager" /> class.</summary>
+        /// <param name="gameCanvas">The game canvas.</param>
         public GameManager(Canvas gameCanvas)
         {
             this.GameCanvas = gameCanvas;
