@@ -41,6 +41,30 @@ namespace Frogger.Controller
         /// </value>
         private Canvas GameCanvas { get; }
 
+        /// <summary>
+        ///     Gets the lives of the player.
+        /// </summary>
+        /// <value>
+        ///     The lives of the player.
+        /// </value>
+        public int Lives { get; set; }
+
+        /// <summary>
+        ///     Gets the current score of the player
+        /// </summary>
+        /// <value>
+        ///     The current score of the player.
+        /// </value>
+        public int Score { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the level.
+        /// </summary>
+        /// <value>
+        ///     The level.
+        /// </value>
+        public int Level { get; set; }
+
         #endregion
 
         #region Constructors
@@ -167,6 +191,7 @@ namespace Frogger.Controller
             this.Player.Y = (double)Application.Current.Resources["LowShoulderYLocation"];
         }
 
+        #region Move Player
         /// <summary>
         ///     Moves the player to the left.
         ///     Precondition: none
@@ -223,7 +248,9 @@ namespace Frogger.Controller
                 this.Player.MoveDown();
             }
         }
+        #endregion
 
+        #region Spin Sprites
         private void turnSpriteDown()
         {
             var height = (float)this.Player.Sprite.Height / 2;
@@ -267,6 +294,7 @@ namespace Frogger.Controller
             this.Player.Sprite.CenterPoint = vector;
             this.Player.Sprite.Rotation = 90;
         }
+        #endregion
 
         #endregion
     }

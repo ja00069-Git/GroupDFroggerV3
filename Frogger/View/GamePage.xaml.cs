@@ -83,15 +83,19 @@ namespace Frogger.View
 
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
 
-            this.GameManager = new GameManager(this.canvas)
+            if (this.GameManager == null)
             {
-                Lives = this.Lives,
-                Score = this.Score,
-                TimeCountDown = this.Timer,
-                Level = this.Level
-            };
+                this.GameManager = new GameManager(this.canvas)
+                {
+                    Lives = this.Lives,
+                    Score = this.Score,
+                    TimeCountDown = this.Timer,
+                    Level = this.Level
+                };
 
-            this.GameManager.InitializeGame(this.canvas);
+                this.GameManager.InitializeGame(this.canvas);
+            }
+
             this.GameManager.LivesUpdated += this.livesUpdated;
             this.GameManager.ScoreUpdated += this.scoreUpdated;
             this.GameManager.GameOver += this.OnGameOver;

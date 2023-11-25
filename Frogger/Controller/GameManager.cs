@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -15,17 +17,19 @@ namespace Frogger.Controller
     {
         #region Data members
 
-        private DispatcherTimer timer;
+        private DispatcherTimer gameTimer;
         private DispatcherTimer lifeDispatcherTimer;
 
         private readonly LaneManager laneManager;
         private readonly BonusTimeManager bonusTimeManager;
 
         private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
-        private readonly SoundEffects soundEffects;
         private readonly PowerUp powerUp = new PowerUp();
-        private int homeLandingCount;
+        private readonly SoundEffects soundEffects;
+
         private bool canAddBonus = true;
+        private int homeLandingCount;
+        private bool isGameOver;
 
         #endregion
 
@@ -48,28 +52,40 @@ namespace Frogger.Controller
         public PlayerManager PlayerManager { get; }
 
         /// <summary>
-        ///     Gets the lives of the player.
+        ///     Gets the lives of the player from the player manager.
         /// </summary>
         /// <value>
         ///     The lives of the player.
         /// </value>
-        public int Lives { get; set; }
+        public int Lives
+        {
+            get => this.PlayerManager.Lives;
+            set => this.PlayerManager.Lives = value;
+        }
 
         /// <summary>
-        ///     Gets the current score of the player
+        ///     Gets the current score of the player from the player manager
         /// </summary>
         /// <value>
         ///     The current score of the player.
         /// </value>
-        public int Score { get; set; }
+        public int Score
+        {
+            get => this.PlayerManager.Score;
+            set => this.PlayerManager.Score = value;
+        }
 
         /// <summary>
-        ///     Gets or sets the level.
+        ///     Gets or sets the level from the player manager.
         /// </summary>
         /// <value>
         ///     The level.
         /// </value>
-        public int Level { get; set; }
+        public int Level
+        {
+            get => this.PlayerManager.Level;
+            set => this.PlayerManager.Level = value;
+        }
 
         private Canvas GameCanvas { get; }
 
@@ -86,29 +102,20 @@ namespace Frogger.Controller
 
             this.setupGameTimer(gameCanvas);
             this.setupLifeTimer();
+
             this.PlayerManager = new PlayerManager(gameCanvas);
             this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
             this.bonusTimeManager = new BonusTimeManager(gameCanvas);
 
-            this.PlayerManager.AnimationOver += this.startGame;
-            this.PlayerManager.AnimationStarted += this.stopGame;
+            this.PlayerManager.AnimationOver += this.startGameAfterDeathAnimation;
+            this.PlayerManager.AnimationStarted += this.stopGameBeforeDeathAnimation;
         }
 
 
         #endregion
 
-        #region Methods
-
-        private void stopGame(object sender, EventArgs e)
-        {
-            this.timer.Stop();
-        }
-
-        private void startGame(object sender, EventArgs e)
-        {
-            this.timer.Start();
-        }
+        #region Event Handlers
 
         /// <summary>
         ///     Occurs when [level updated].
@@ -139,6 +146,9 @@ namespace Frogger.Controller
         /// <summary>Occurs when [game over vm].</summary>
         public static event EventHandler<GameOverVmEventArgs> GameOverVm;
 
+        #endregion
+
+        #region Methods
 
         /// <summary>
         ///     Initializes the game working with appropriate classes to place frog
@@ -166,7 +176,7 @@ namespace Frogger.Controller
         /// <param name="gameCanvas">The game canvas.</param>
         public void ResetGame(Canvas gameCanvas)
         {
-            this.timer.Stop();
+            this.gameTimer.Stop();
             this.lifeDispatcherTimer.Stop();
 
             this.laneManager.ClearLanesAndVehicles(gameCanvas);
@@ -175,10 +185,35 @@ namespace Frogger.Controller
 
             this.resetGameStats();
 
-            this.timer.Start();
+            this.gameTimer.Start();
             this.lifeDispatcherTimer.Start();
 
             this.configureLevelParameters(gameCanvas);
+        }
+
+        private void startGameAfterDeathAnimation(object sender, EventArgs e)
+        {
+            this.startAllTimers();
+        }
+
+        private void stopGameBeforeDeathAnimation(object sender, EventArgs e)
+        {
+            this.stopAllTimers();
+        }
+
+        private void gameOver()
+        {
+            this.isGameOver = true;
+            this.stopAllTimers();
+
+            var args = new GameOverVmEventArgs
+            {
+                Score = this.Score,
+                Level = this.Level
+            };
+
+            this.GameOver?.Invoke(this, EventArgs.Empty);
+            GameOverVm?.Invoke(this, args);
         }
 
         private void configureLevelParameters(Canvas gameCanvas)
@@ -233,9 +268,11 @@ namespace Frogger.Controller
             }
         }
 
+        private bool playerHasNoLives => this.Lives <= 0;
+
         private async void timerOnTick(Canvas gameCanvas)
         {
-            if (this.Lives <= 0)
+            if (this.playerHasNoLives)
             {
                 await this.soundEffects.GameOverSound();
                 this.gameOver();
@@ -260,49 +297,54 @@ namespace Frogger.Controller
                 {
                     this.GameOver?.Invoke(this, EventArgs.Empty);
                     await this.soundEffects.GameOverSound();
-                    this.timer.Stop();
+                    this.gameTimer.Stop();
                     this.lifeDispatcherTimer.Stop();
                 }
             }
 
-            this.checkCollisionWithMushroom();
+            if (!this.isGameOver)
+            {
+                this.checkCollisionWithMushroom();
+                this.moveVehicle();
+                this.updateScore();
+            }
+        }
 
-            this.moveVehicle();
-            this.updateScore();
+        private void startAllTimers()
+        {
+            if (!this.isGameOver)
+            {
+                this.gameTimer.Start();
+                this.lifeDispatcherTimer.Start();
+            }
+        }
+
+        private void stopAllTimers()
+        {
+            this.gameTimer.Stop();
+            this.lifeDispatcherTimer.Stop();
         }
 
         private void checkCollisionWithMushroom()
         {
             if (this.bonusTimeManager.CheckPlayerCollision(this.PlayerManager.Player) & this.canAddBonus)
             {
-                this.timer.Stop();
+                this.gameTimer.Stop();
                 this.canAddBonus = false;
                 this.bonusTimeManager.DisableSprite();
                 this.TimeCountDown += this.bonusTimeManager.BonusInSec;
-                this.timer.Start();
+                this.gameTimer.Start();
             }
         }
 
-        private void gameOver()
-        {
-            var args = new GameOverVmEventArgs
-            {
-                Score = this.Score,
-                Level = this.Level
-            };
-
-            this.timer.Stop();
-            this.lifeDispatcherTimer.Stop();
-            this.GameOver?.Invoke(this, EventArgs.Empty);
-            GameOverVm?.Invoke(this, args);
-        }
+        
 
         private void setupGameTimer(Canvas gameCanvas)
         {
-            this.timer = new DispatcherTimer();
-            this.timer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
-            this.timer.Interval = TimeSpan.FromMilliseconds(15);
-            this.timer.Start();
+            this.gameTimer = new DispatcherTimer();
+            this.gameTimer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
+            this.gameTimer.Interval = TimeSpan.FromMilliseconds(15);
+            this.gameTimer.Start();
         }
 
         private void setupLifeTimer()
@@ -338,11 +380,11 @@ namespace Frogger.Controller
 
             foreach (var lane in this.laneManager.Lanes)
             {
-                this.collusionManagement(lane);
+                this.collisionManagement(lane);
             }
         }
 
-        private void collusionManagement(Lane lane)
+        private void collisionManagement(Lane lane)
         {
             foreach (var vehicle in lane.Vehicles)
             {
@@ -357,6 +399,7 @@ namespace Frogger.Controller
         { 
             this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
+            Debug.WriteLine("Sound from the handle collision");
             this.Lives--;
             this.onLivesUpdated();
             this.TimeCountDown = 20;
@@ -454,6 +497,7 @@ namespace Frogger.Controller
                 this.Lives--;
                 this.onLivesUpdated();
                 await this.soundEffects.DyingSound();
+                Debug.WriteLine("Sound from the time out");
                 this.lifeDispatcherTimer.Start();
             }
 
@@ -478,6 +522,7 @@ namespace Frogger.Controller
             this.TimeCountDown = 20;
             this.onTimeOutChanged();
             this.deactivatePowerUp();
+            this.isGameOver = false;
         }
 
         #endregion

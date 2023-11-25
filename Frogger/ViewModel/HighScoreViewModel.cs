@@ -26,7 +26,6 @@ namespace Frogger.ViewModel
         #region Data members
 
         private readonly HighScoreBoard scoreBoard;
-        private readonly GamePage gamePage;
 
         #endregion
 
@@ -145,7 +144,6 @@ namespace Frogger.ViewModel
         /// </summary>
         public HighScoreViewModel()
         {
-            this.gamePage = new GamePage();
             this.scoreBoard = new HighScoreBoard();
             this.updateListView();
             this.loadCommand();
