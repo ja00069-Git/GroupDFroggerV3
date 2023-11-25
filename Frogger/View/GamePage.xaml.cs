@@ -5,7 +5,6 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Frogger.Controller;
-using Frogger.View.Sprites;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -23,12 +22,13 @@ namespace Frogger.View
 
         #endregion
 
-        #region Properties        
+        #region Properties
+
         /// <summary>
-        /// Gets the game manager.
+        ///     Gets the game manager.
         /// </summary>
         /// <value>
-        /// The game manager.
+        ///     The game manager.
         /// </value>
         public GameManager GameManager { get; }
 
@@ -93,7 +93,7 @@ namespace Frogger.View
                     Level = this.Level
                 };
 
-                this.GameManager.InitializeGame(this.canvas);
+                this.GameManager.InitializeGame();
             }
 
             this.GameManager.LivesUpdated += this.livesUpdated;
@@ -107,6 +107,12 @@ namespace Frogger.View
 
         #region Methods
 
+        private void OnGameOver(object sender, EventArgs e)
+        {
+            this.gameOverTextBlock.Visibility = Visibility.Visible;
+            Frame.Navigate(typeof(HighScorePage));
+        }
+
         private void onLevelUpdated(object sender, EventArgs e)
         {
             this.level.Text = ((GameManager)sender).Level.ToString();
@@ -115,12 +121,6 @@ namespace Frogger.View
         private void decrementTime(object sender, EventArgs e)
         {
             this.timerTexBlock.Text = ((GameManager)sender).TimeCountDown.ToString();
-        }
-
-        private void OnGameOver(object sender, EventArgs e)
-        {
-            this.gameOverTextBlock.Visibility = Visibility.Visible;
-            Frame.Navigate(typeof(HighScorePage));
         }
 
         private void scoreUpdated(object sender, EventArgs e)
@@ -154,7 +154,7 @@ namespace Frogger.View
 
         private void playAgainButtonClick(object sender, RoutedEventArgs e)
         {
-            this.GameManager.ResetGame(this.canvas);
+            this.GameManager.ResetGame();
             this.gameOverTextBlock.Visibility = Visibility.Collapsed;
             this.onLevelUpdated(this.GameManager, EventArgs.Empty);
         }

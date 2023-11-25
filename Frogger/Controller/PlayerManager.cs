@@ -191,7 +191,10 @@ namespace Frogger.Controller
             this.Player.Y = (double)Application.Current.Resources["LowShoulderYLocation"];
         }
 
+        #endregion
+
         #region Move Player
+
         /// <summary>
         ///     Moves the player to the left.
         ///     Precondition: none
@@ -248,9 +251,11 @@ namespace Frogger.Controller
                 this.Player.MoveDown();
             }
         }
+
         #endregion
 
         #region Spin Sprites
+
         private void turnSpriteDown()
         {
             var height = (float)this.Player.Sprite.Height / 2;
@@ -294,7 +299,6 @@ namespace Frogger.Controller
             this.Player.Sprite.CenterPoint = vector;
             this.Player.Sprite.Rotation = 90;
         }
-        #endregion
 
         #endregion
     }

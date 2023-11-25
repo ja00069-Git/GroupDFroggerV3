@@ -2,7 +2,6 @@
 
 namespace Frogger.View.Sprites
 {
-
     /// <summary>
     ///     Draws the PowerUpSprite
     /// </summary>
@@ -11,6 +10,8 @@ namespace Frogger.View.Sprites
     /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
     public sealed partial class PowerUpSprite
     {
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="PowerUpSprite" /> class.
         /// </summary>
@@ -18,5 +19,7 @@ namespace Frogger.View.Sprites
         {
             this.InitializeComponent();
         }
+
+        #endregion
     }
 }

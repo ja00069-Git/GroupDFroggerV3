@@ -8,7 +8,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <UserControl.Resources>
-        <SolidColorBrush x:Key="ShoulderColor" Color="Gray" />
     </UserControl.Resources>
 
     <Canvas Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" Background="Chartreuse">

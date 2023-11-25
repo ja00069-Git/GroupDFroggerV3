@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
-using Frogger.View.Sprites;
 
 namespace Frogger.Controller
 {
@@ -89,18 +86,19 @@ namespace Frogger.Controller
 
         private Canvas GameCanvas { get; }
 
+        private bool PlayerHasNoLives => this.Lives <= 0;
+
         #endregion
 
         #region Constructors
-
 
         /// <summary>Initializes a new instance of the <see cref="GameManager" /> class.</summary>
         /// <param name="gameCanvas">The game canvas.</param>
         public GameManager(Canvas gameCanvas)
         {
-            this.GameCanvas = gameCanvas;
+            this.GameCanvas = gameCanvas ?? throw new ArgumentNullException(nameof(gameCanvas));
 
-            this.setupGameTimer(gameCanvas);
+            this.setupGameTimer();
             this.setupLifeTimer();
 
             this.PlayerManager = new PlayerManager(gameCanvas);
@@ -112,40 +110,6 @@ namespace Frogger.Controller
             this.PlayerManager.AnimationStarted += this.stopGameBeforeDeathAnimation;
         }
 
-
-        #endregion
-
-        #region Event Handlers
-
-        /// <summary>
-        ///     Occurs when [level updated].
-        /// </summary>
-        public event EventHandler LevelUpdated;
-
-        /// <summary>
-        ///     Event Occurs when [lives updated].
-        /// </summary>
-        public event EventHandler LivesUpdated;
-
-        /// <summary>
-        ///     Event Occurs when [score updated].
-        /// </summary>
-        public event EventHandler ScoreUpdated;
-
-        /// <summary>
-        ///     Occurs when [time out].
-        /// </summary>
-        public event EventHandler TimeOut;
-
-        /// <summary>
-        ///     Event Occurs when [game over].
-        /// </summary>
-        public event EventHandler GameOver;
-
-
-        /// <summary>Occurs when [game over vm].</summary>
-        public static event EventHandler<GameOverVmEventArgs> GameOverVm;
-
         #endregion
 
         #region Methods
@@ -156,30 +120,23 @@ namespace Frogger.Controller
         ///     Precondition: gameCanvas != null
         ///     Postcondition: Game is initialized and ready for play.
         /// </summary>
-        /// <param name="gameCanvas">The game canvas.</param>
         /// <exception cref="ArgumentNullException">gameCanvas</exception>
-        public void InitializeGame(Canvas gameCanvas)
+        public void InitializeGame()
         {
-            if (gameCanvas == null)
-            {
-                throw new ArgumentNullException(nameof(gameCanvas));
-            }
-
-            this.configureLevelParameters(gameCanvas);
-            this.createHomeLandingSPots(gameCanvas);
+            this.configureLevelParameters();
+            this.createHomeLandingSPots(this.GameCanvas);
             this.bonusTimeManager.PlaceBonusTimeSprite();
         }
 
         /// <summary>
         ///     Resets the game.
         /// </summary>
-        /// <param name="gameCanvas">The game canvas.</param>
-        public void ResetGame(Canvas gameCanvas)
+        public void ResetGame()
         {
             this.gameTimer.Stop();
             this.lifeDispatcherTimer.Stop();
 
-            this.laneManager.ClearLanesAndVehicles(gameCanvas);
+            this.laneManager.ClearLanesAndVehicles(this.GameCanvas);
 
             this.unOccupyHomeLandingSpots();
 
@@ -188,7 +145,7 @@ namespace Frogger.Controller
             this.gameTimer.Start();
             this.lifeDispatcherTimer.Start();
 
-            this.configureLevelParameters(gameCanvas);
+            this.configureLevelParameters();
         }
 
         private void startGameAfterDeathAnimation(object sender, EventArgs e)
@@ -201,8 +158,10 @@ namespace Frogger.Controller
             this.stopAllTimers();
         }
 
-        private void gameOver()
+        private async void gameOver()
         {
+            await this.soundEffects.GameOverSound();
+
             this.isGameOver = true;
             this.stopAllTimers();
 
@@ -216,7 +175,43 @@ namespace Frogger.Controller
             GameOverVm?.Invoke(this, args);
         }
 
-        private void configureLevelParameters(Canvas gameCanvas)
+        private async void timerOnTick()
+        {
+            if (this.PlayerHasNoLives)
+            {
+                this.gameOver();
+            }
+            else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
+            {
+                this.unOccupyHomeLandingSpots();
+
+                this.Level++;
+                await this.soundEffects.LevelUpSound();
+                this.deactivatePowerUp();
+                this.homeLandingCount = 0;
+                this.configureLevelParameters();
+                this.LevelUpdated?.Invoke(this, EventArgs.Empty);
+
+                if (this.Level <= 3)
+                {
+                    this.configureLevelParameters();
+                    this.LevelUpdated?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    this.gameOver();
+                }
+            }
+
+            if (!this.isGameOver)
+            {
+                this.checkCollisionWithMushroom();
+                this.moveVehicle();
+                this.updateScore();
+            }
+        }
+
+        private void configureLevelParameters()
         {
             switch (this.Level)
             {
@@ -224,28 +219,33 @@ namespace Frogger.Controller
                     LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 2, 1, 3, 2, 4 };
 
-                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+                    this.laneManager.CreateAndPlaceLanes(this.GameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
                     this.canAddBonus = true;
                     this.bonusTimeManager.EnableSprite();
+
                     break;
 
                 case 2:
                     LaneManager.LaneSpeeds = new[] { 0.3, 0.4, 0.5, 0.6, 0.7 };
                     LaneManager.VehiclesPerLane = new[] { 3, 2, 4, 3, 5 };
-                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+
+                    this.laneManager.CreateAndPlaceLanes(this.GameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
                     this.canAddBonus = true;
                     this.bonusTimeManager.EnableSprite();
+
                     break;
 
                 case 3:
                     LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
-                    this.laneManager.CreateAndPlaceLanes(gameCanvas);
+
+                    this.laneManager.CreateAndPlaceLanes(this.GameCanvas);
                     this.PlayerManager.CreateAndPlacePlayer();
                     this.canAddBonus = true;
                     this.bonusTimeManager.EnableSprite();
+
                     break;
             }
         }
@@ -265,48 +265,6 @@ namespace Frogger.Controller
                 gameCanvas.Children.Add(pod.Sprite);
                 pod.X = i * (podWidth + podSpacing);
                 pod.Y = (double)Application.Current.Resources["HighShoulderYLocation"];
-            }
-        }
-
-        private bool playerHasNoLives => this.Lives <= 0;
-
-        private async void timerOnTick(Canvas gameCanvas)
-        {
-            if (this.playerHasNoLives)
-            {
-                await this.soundEffects.GameOverSound();
-                this.gameOver();
-            }
-            else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
-            {
-                this.unOccupyHomeLandingSpots();
-
-                this.Level++;
-                await this.soundEffects.LevelUpSound();
-                this.deactivatePowerUp();
-                this.homeLandingCount = 0;
-                this.configureLevelParameters(gameCanvas);
-                this.LevelUpdated?.Invoke(this, EventArgs.Empty);
-
-                if (this.Level <= 3)
-                {
-                    this.configureLevelParameters(gameCanvas);
-                    this.LevelUpdated?.Invoke(this, EventArgs.Empty);
-                }
-                else
-                {
-                    this.GameOver?.Invoke(this, EventArgs.Empty);
-                    await this.soundEffects.GameOverSound();
-                    this.gameTimer.Stop();
-                    this.lifeDispatcherTimer.Stop();
-                }
-            }
-
-            if (!this.isGameOver)
-            {
-                this.checkCollisionWithMushroom();
-                this.moveVehicle();
-                this.updateScore();
             }
         }
 
@@ -337,12 +295,10 @@ namespace Frogger.Controller
             }
         }
 
-        
-
-        private void setupGameTimer(Canvas gameCanvas)
+        private void setupGameTimer()
         {
             this.gameTimer = new DispatcherTimer();
-            this.gameTimer.Tick += (sender, e) => this.timerOnTick(gameCanvas);
+            this.gameTimer.Tick += (sender, e) => this.timerOnTick();
             this.gameTimer.Interval = TimeSpan.FromMilliseconds(15);
             this.gameTimer.Start();
         }
@@ -396,10 +352,9 @@ namespace Frogger.Controller
         }
 
         private async void handleCollision()
-        { 
+        {
             this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
-            Debug.WriteLine("Sound from the handle collision");
             this.Lives--;
             this.onLivesUpdated();
             this.TimeCountDown = 20;
@@ -497,7 +452,6 @@ namespace Frogger.Controller
                 this.Lives--;
                 this.onLivesUpdated();
                 await this.soundEffects.DyingSound();
-                Debug.WriteLine("Sound from the time out");
                 this.lifeDispatcherTimer.Start();
             }
 
@@ -526,22 +480,55 @@ namespace Frogger.Controller
         }
 
         #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        ///     Occurs when [level updated].
+        /// </summary>
+        public event EventHandler LevelUpdated;
+
+        /// <summary>
+        ///     Event Occurs when [lives updated].
+        /// </summary>
+        public event EventHandler LivesUpdated;
+
+        /// <summary>
+        ///     Event Occurs when [score updated].
+        /// </summary>
+        public event EventHandler ScoreUpdated;
+
+        /// <summary>
+        ///     Occurs when [time out].
+        /// </summary>
+        public event EventHandler TimeOut;
+
+        /// <summary>
+        ///     Event Occurs when [game over].
+        /// </summary>
+        public event EventHandler GameOver;
+
+        /// <summary>Occurs when [game over vm].</summary>
+        public static event EventHandler<GameOverVmEventArgs> GameOverVm;
+
+        #endregion
     }
 
-
     /// <summary>
-    ///   Defines the arguments for the View Model Game Over Event
+    ///     Defines the arguments for the View Model Game Over Event
     /// </summary>
     public class GameOverVmEventArgs : EventArgs
     {
+        #region Properties
 
         /// <summary>Gets or sets the score.</summary>
         /// <value>The score.</value>
         public int Score { get; set; }
 
-
         /// <summary>Gets or sets the level.</summary>
         /// <value>The level.</value>
         public int Level { get; set; }
+
+        #endregion
     }
 }

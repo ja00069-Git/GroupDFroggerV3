@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Frogger.View
 {
-
     /// <summary>
-    ///   The game start page
+    ///     The game start page
     /// </summary>
     public sealed partial class StartPage
     {
@@ -31,6 +18,7 @@ namespace Frogger.View
 
         #endregion
 
+        #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="StartPage" /> class.</summary>
         public StartPage()
@@ -44,6 +32,10 @@ namespace Frogger.View
                 .SetPreferredMinSize(new Size(this.applicationWidth, this.applicationHeight));
         }
 
+        #endregion
+
+        #region Methods
+
         private void startGameButtonClick(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(GamePage));
@@ -53,5 +45,7 @@ namespace Frogger.View
         {
             Frame.Navigate(typeof(HighScorePage));
         }
+
+        #endregion
     }
 }
