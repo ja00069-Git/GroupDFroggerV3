@@ -125,6 +125,7 @@
     <Compile Include="Controller\BonusTimeManager.cs" />
     <Compile Include="Controller\GameManager.cs" />
     <Compile Include="Controller\HighScoreBoard.cs" />
+    <Compile Include="Controller\LandingSpotManager.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\BonusTimePowerUp.cs" />
     <Compile Include="ViewModel\HighScoreViewModel.cs" />

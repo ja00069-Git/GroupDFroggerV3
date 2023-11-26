@@ -144,7 +144,7 @@ namespace Frogger.Controller
                 }
                 case 4:
                 {
-                    this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; //Turns off last frame
+                    this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
                     this.deathAnimationTimer.Stop();
                     this.currentFrame = 0;
                     this.Player.Sprite.Opacity = 1;
@@ -157,7 +157,7 @@ namespace Frogger.Controller
 
         private void turnOffLastFrameAndTurnOnCurrentFrame()
         {
-            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; //Turns off last frame
+            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
             this.deathFrameSprites[this.currentFrame].RenderAt(this.Player.X, this.Player.Y);
             this.deathFrameSprites[this.currentFrame].Opacity = 1;
             this.currentFrame++;

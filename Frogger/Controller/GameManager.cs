@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -14,13 +13,17 @@ namespace Frogger.Controller
     {
         #region Data members
 
+        private const int MaxLevel = 3;
+        private const int LandHomeIn = 20;
+
         private DispatcherTimer gameTimer;
         private DispatcherTimer lifeDispatcherTimer;
 
         private readonly LaneManager laneManager;
         private readonly BonusTimeManager bonusTimeManager;
 
-        private readonly IList<HomeLandingSpot> homeLandingSpots = new List<HomeLandingSpot>();
+        private readonly LandingSpotManager landingSpotManager;
+
         private readonly PowerUp powerUp = new PowerUp();
         private readonly SoundEffects soundEffects;
 
@@ -105,6 +108,7 @@ namespace Frogger.Controller
             this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
             this.bonusTimeManager = new BonusTimeManager(gameCanvas);
+            this.landingSpotManager = new LandingSpotManager(gameCanvas);
 
             this.PlayerManager.AnimationOver += this.startGameAfterDeathAnimation;
             this.PlayerManager.AnimationStarted += this.stopGameBeforeDeathAnimation;
@@ -124,7 +128,7 @@ namespace Frogger.Controller
         public void InitializeGame()
         {
             this.configureLevelParameters();
-            this.createHomeLandingSPots(this.GameCanvas);
+            this.landingSpotManager.CreateHomeLandingSpots(this.GameCanvas);
             this.bonusTimeManager.PlaceBonusTimeSprite();
         }
 
@@ -138,7 +142,7 @@ namespace Frogger.Controller
 
             this.laneManager.ClearLanesAndVehicles(this.GameCanvas);
 
-            this.unOccupyHomeLandingSpots();
+            this.landingSpotManager.UnOccupyHomeLandingSpots();
 
             this.resetGameStats();
 
@@ -181,9 +185,9 @@ namespace Frogger.Controller
             {
                 this.gameOver();
             }
-            else if (this.allHomeLandingSpotsOccupied() && this.Level < 4)
+            else if (this.landingSpotManager.AllHomeLandingSpotsOccupied() && this.Level < 4)
             {
-                this.unOccupyHomeLandingSpots();
+                this.landingSpotManager.UnOccupyHomeLandingSpots();
 
                 this.Level++;
                 await this.soundEffects.LevelUpSound();
@@ -192,7 +196,7 @@ namespace Frogger.Controller
                 this.configureLevelParameters();
                 this.LevelUpdated?.Invoke(this, EventArgs.Empty);
 
-                if (this.Level <= 3)
+                if (this.Level <= MaxLevel)
                 {
                     this.configureLevelParameters();
                     this.LevelUpdated?.Invoke(this, EventArgs.Empty);
@@ -237,7 +241,7 @@ namespace Frogger.Controller
 
                     break;
 
-                case 3:
+                case MaxLevel:
                     LaneManager.LaneSpeeds = new[] { 0.1, 0.2, 0.3, 0.4, 0.5 };
                     LaneManager.VehiclesPerLane = new[] { 4, 3, 5, 4, 6 };
 
@@ -247,24 +251,6 @@ namespace Frogger.Controller
                     this.bonusTimeManager.EnableSprite();
 
                     break;
-            }
-        }
-
-        private void createHomeLandingSPots(Canvas gameCanvas)
-        {
-            var numPods = 5;
-            const int podWidth = 60;
-            var highShoulderWidth = (double)Application.Current.Resources["AppWidth"];
-            var availableSpace = highShoulderWidth - numPods * podWidth;
-            var podSpacing = availableSpace / (numPods - 1);
-
-            for (var i = 0; i < numPods; i++)
-            {
-                var pod = new HomeLandingSpot();
-                this.homeLandingSpots.Add(pod);
-                gameCanvas.Children.Add(pod.Sprite);
-                pod.X = i * (podWidth + podSpacing);
-                pod.Y = (double)Application.Current.Resources["HighShoulderYLocation"];
             }
         }
 
@@ -317,19 +303,6 @@ namespace Frogger.Controller
             this.onTimeOutChanged();
         }
 
-        private bool allHomeLandingSpotsOccupied()
-        {
-            foreach (var spot in this.homeLandingSpots)
-            {
-                if (!spot.PodOccupied)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void moveVehicle()
         {
             this.laneManager.VehicleManager.MoveVehicle();
@@ -357,7 +330,7 @@ namespace Frogger.Controller
             await this.soundEffects.DyingSound();
             this.Lives--;
             this.onLivesUpdated();
-            this.TimeCountDown = 20;
+            this.TimeCountDown = LandHomeIn;
         }
 
         private void updateScore()
@@ -365,7 +338,7 @@ namespace Frogger.Controller
             var landedHome = false;
             var dintLandHome = false;
 
-            foreach (var spot in this.homeLandingSpots)
+            foreach (var spot in this.landingSpotManager.HomeLandingSpots)
             {
                 if (spot.CheckCollision(this.PlayerManager.Player) &&
                     !spot.PodOccupied)
@@ -393,7 +366,7 @@ namespace Frogger.Controller
 
         private void handleDintLandingHome()
         {
-            this.TimeCountDown = 20;
+            this.TimeCountDown = LandHomeIn;
             this.Lives--;
             this.onLivesUpdated();
             this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
@@ -401,25 +374,48 @@ namespace Frogger.Controller
 
         private async void handleLandingHome()
         {
-            await this.soundEffects.LandingHomeSounds();
-            var increaseScoreBy = this.TimeCountDown;
+            var collisionDetected = false;
+            HomeLandingSpot occupiedSpot = null;
 
-            if (this.powerUp.IsActive)
+            foreach (var spot in this.landingSpotManager.HomeLandingSpots)
             {
-                increaseScoreBy *= this.powerUp.HasDoubleScoreEffect ? 2 : 1;
+                if (spot.CheckCollision(this.PlayerManager.Player) && !spot.PodOccupied)
+                {
+                    collisionDetected = true;
+                    occupiedSpot = spot;
+                    break;
+                }
             }
 
-            this.Score += increaseScoreBy;
-
-            if (++this.homeLandingCount == 3)
+            if (collisionDetected)
             {
                 await this.soundEffects.LandingHomeSounds();
-                this.activatePowerUp();
-            }
 
-            this.onScoreUpdated();
-            this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
-            this.TimeCountDown = 20;
+                occupiedSpot.OccupyPodWithFrog();
+
+                var increaseScoreBy = this.TimeCountDown;
+
+                if (this.powerUp.IsActive)
+                {
+                    increaseScoreBy *= this.powerUp.HasDoubleScoreEffect ? 2 : 1;
+                }
+
+                this.Score += increaseScoreBy;
+
+                if (++this.homeLandingCount == 3)
+                {
+                    await this.soundEffects.LandingHomeSounds();
+                    this.activatePowerUp();
+                }
+
+                this.onScoreUpdated();
+                this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
+                this.TimeCountDown = LandHomeIn;
+            }
+            else
+            {
+                this.handleDintLandingHome();
+            }
         }
 
         private async void activatePowerUp()
@@ -448,7 +444,7 @@ namespace Frogger.Controller
             this.TimeOut?.Invoke(this, EventArgs.Empty);
             if (this.TimeCountDown == 0)
             {
-                this.TimeCountDown = 20;
+                this.TimeCountDown = LandHomeIn;
                 this.Lives--;
                 this.onLivesUpdated();
                 await this.soundEffects.DyingSound();
@@ -458,14 +454,6 @@ namespace Frogger.Controller
             this.onLivesUpdated();
         }
 
-        private void unOccupyHomeLandingSpots()
-        {
-            foreach (var spot in this.homeLandingSpots)
-            {
-                spot.UnoccupySpot();
-            }
-        }
-
         private void resetGameStats()
         {
             this.Lives = 4;
@@ -473,7 +461,7 @@ namespace Frogger.Controller
             this.Score = 0;
             this.onScoreUpdated();
             this.Level = 1;
-            this.TimeCountDown = 20;
+            this.TimeCountDown = LandHomeIn;
             this.onTimeOutChanged();
             this.deactivatePowerUp();
             this.isGameOver = false;
