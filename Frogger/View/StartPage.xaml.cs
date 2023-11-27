@@ -1,16 +1,15 @@
-﻿// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
-using Windows.Foundation;
+﻿using Windows.Foundation;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+
+// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Frogger.View
 {
     /// <summary>
-    ///     High Score view
+    ///     The game start page
     /// </summary>
-    /// <seealso cref="Windows.UI.Xaml.Controls.Page" />
-    public sealed partial class HighScorePage
+    public sealed partial class StartPage
     {
         #region Data members
 
@@ -21,10 +20,8 @@ namespace Frogger.View
 
         #region Constructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="HighScorePage" /> class.
-        /// </summary>
-        public HighScorePage()
+        /// <summary>Initializes a new instance of the <see cref="StartPage" /> class.</summary>
+        public StartPage()
         {
             this.InitializeComponent();
 
@@ -39,14 +36,14 @@ namespace Frogger.View
 
         #region Methods
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void startGameButtonClick(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(GamePage));
         }
 
-        private void Start_Screen(object sender, RoutedEventArgs e)
+        private void scoreBoardButtonClick(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(StartPage));
+            Frame.Navigate(typeof(HighScorePage));
         }
 
         #endregion

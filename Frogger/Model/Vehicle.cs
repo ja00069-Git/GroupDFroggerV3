@@ -1,5 +1,5 @@
 ﻿using Frogger.Model.Frogger.Model;
-using Frogger.View.Sprites;
+using Frogger.View.Sprites.Vehicles;
 
 namespace Frogger.Model
 {

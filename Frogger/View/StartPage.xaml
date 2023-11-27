@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="Frogger.View.StartPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <UserControl.Resources>
+    </UserControl.Resources>
+
+    <Canvas Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" Background="Chartreuse">
+        <Button Content="Start Game" Canvas.Left="278" Canvas.Top="203" VerticalAlignment="Top" Background="Gray"
+                Click="startGameButtonClick" />
+        <Button Content="Score Board" Canvas.Left="275" Canvas.Top="275" VerticalAlignment="Top" Background="Gray"
+                Click="scoreBoardButtonClick" />
+    </Canvas>
+</Page>

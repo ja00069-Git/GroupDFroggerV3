@@ -22,12 +22,13 @@ namespace Frogger.View
 
         #endregion
 
-        #region Properties        
+        #region Properties
+
         /// <summary>
-        /// Gets the game manager.
+        ///     Gets the game manager.
         /// </summary>
         /// <value>
-        /// The game manager.
+        ///     The game manager.
         /// </value>
         public GameManager GameManager { get; }
 
@@ -82,15 +83,19 @@ namespace Frogger.View
 
             Window.Current.CoreWindow.KeyDown += this.coreWindowOnKeyDown;
 
-            this.GameManager = new GameManager(this.canvas)
+            if (this.GameManager == null)
             {
-                Lives = this.Lives,
-                Score = this.Score,
-                TimeCountDown = this.Timer,
-                Level = this.Level
-            };
+                this.GameManager = new GameManager(this.canvas)
+                {
+                    Lives = this.Lives,
+                    Score = this.Score,
+                    TimeCountDown = this.Timer,
+                    Level = this.Level
+                };
 
-            this.GameManager.InitializeGame(this.canvas);
+                this.GameManager.InitializeGame();
+            }
+
             this.GameManager.LivesUpdated += this.livesUpdated;
             this.GameManager.ScoreUpdated += this.scoreUpdated;
             this.GameManager.GameOver += this.OnGameOver;
@@ -102,6 +107,12 @@ namespace Frogger.View
 
         #region Methods
 
+        private void OnGameOver(object sender, EventArgs e)
+        {
+            this.gameOverTextBlock.Visibility = Visibility.Visible;
+            Frame.Navigate(typeof(HighScorePage));
+        }
+
         private void onLevelUpdated(object sender, EventArgs e)
         {
             this.level.Text = ((GameManager)sender).Level.ToString();
@@ -110,12 +121,6 @@ namespace Frogger.View
         private void decrementTime(object sender, EventArgs e)
         {
             this.timerTexBlock.Text = ((GameManager)sender).TimeCountDown.ToString();
-        }
-
-        private void OnGameOver(object sender, EventArgs e)
-        {
-            this.gameOverTextBlock.Visibility = Visibility.Visible;
-            Frame.Navigate(typeof(HighScorePage));
         }
 
         private void scoreUpdated(object sender, EventArgs e)
@@ -147,9 +152,9 @@ namespace Frogger.View
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void playAgainButtonClick(object sender, RoutedEventArgs e)
         {
-            this.GameManager.ResetGame(this.canvas);
+            this.GameManager.ResetGame();
             this.gameOverTextBlock.Visibility = Visibility.Collapsed;
             this.onLevelUpdated(this.GameManager, EventArgs.Empty);
         }

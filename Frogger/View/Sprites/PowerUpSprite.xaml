@@ -12,20 +12,20 @@
     <UserControl.Resources>
         <SolidColorBrush x:Key="MainColor" Color="Red" />
         <SolidColorBrush x:Key="SecondaryColor" Color="AntiqueWhite" />
-        <SolidColorBrush x:Key="Branch" Color="AntiqueWhite"></SolidColorBrush>
+        <SolidColorBrush x:Key="Branch" Color="AntiqueWhite" />
     </UserControl.Resources>
 
     <Canvas>
-        <Rectangle Height="5" Fill="{StaticResource MainColor}" Canvas.Left="10"  Width="10"/>
-        <Rectangle Height="5" Fill="{StaticResource MainColor}" Canvas.Left="5"  Width="20" Canvas.Top="5"/>
-        <Rectangle Height="10" Fill="{StaticResource MainColor}" Width="30" Canvas.Top="10"/>
+        <Rectangle Height="5" Fill="{StaticResource MainColor}" Canvas.Left="10" Width="10" />
+        <Rectangle Height="5" Fill="{StaticResource MainColor}" Canvas.Left="5" Width="20" Canvas.Top="5" />
+        <Rectangle Height="10" Fill="{StaticResource MainColor}" Width="30" Canvas.Top="10" />
 
-        <Rectangle Height="10" Fill="{StaticResource Branch}" Width="11" Canvas.Top="20" Canvas.Left="10"/>
+        <Rectangle Height="10" Fill="{StaticResource Branch}" Width="11" Canvas.Top="20" Canvas.Left="10" />
 
-        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="10" Canvas.Top="7" Width="3"/>
-        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="18" Canvas.Top="10" Width="3"/>
-        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="5" Canvas.Top="14" Width="3"/>
-        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="14" Canvas.Top="13" Width="3"/>
-        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="22" Canvas.Top="15" Width="3"/>
+        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="10" Canvas.Top="7" Width="3" />
+        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="18" Canvas.Top="10" Width="3" />
+        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="5" Canvas.Top="14" Width="3" />
+        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="14" Canvas.Top="13" Width="3" />
+        <Ellipse Height="3" Fill="{StaticResource SecondaryColor}" Canvas.Left="22" Canvas.Top="15" Width="3" />
     </Canvas>
 </local:BaseSprite>

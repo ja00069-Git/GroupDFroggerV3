@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -39,6 +40,30 @@ namespace Frogger.Controller
         ///     The game canvas.
         /// </value>
         private Canvas GameCanvas { get; }
+
+        /// <summary>
+        ///     Gets the lives of the player.
+        /// </summary>
+        /// <value>
+        ///     The lives of the player.
+        /// </value>
+        public int Lives { get; set; }
+
+        /// <summary>
+        ///     Gets the current score of the player
+        /// </summary>
+        /// <value>
+        ///     The current score of the player.
+        /// </value>
+        public int Score { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the level.
+        /// </summary>
+        /// <value>
+        ///     The level.
+        /// </value>
+        public int Level { get; set; }
 
         #endregion
 
@@ -119,7 +144,7 @@ namespace Frogger.Controller
                 }
                 case 4:
                 {
-                    this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; //Turns off last frame
+                    this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
                     this.deathAnimationTimer.Stop();
                     this.currentFrame = 0;
                     this.Player.Sprite.Opacity = 1;
@@ -132,7 +157,7 @@ namespace Frogger.Controller
 
         private void turnOffLastFrameAndTurnOnCurrentFrame()
         {
-            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; //Turns off last frame
+            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
             this.deathFrameSprites[this.currentFrame].RenderAt(this.Player.X, this.Player.Y);
             this.deathFrameSprites[this.currentFrame].Opacity = 1;
             this.currentFrame++;
@@ -166,6 +191,10 @@ namespace Frogger.Controller
             this.Player.Y = (double)Application.Current.Resources["LowShoulderYLocation"];
         }
 
+        #endregion
+
+        #region Move Player
+
         /// <summary>
         ///     Moves the player to the left.
         ///     Precondition: none
@@ -176,6 +205,7 @@ namespace Frogger.Controller
             if (this.Player.X > 0)
             {
                 this.Player.MoveLeft();
+                this.turnSpriteLeft();
             }
         }
 
@@ -189,6 +219,7 @@ namespace Frogger.Controller
             if (this.Player.X + this.Player.Width < this.backgroundWidth)
             {
                 this.Player.MoveRight();
+                this.turnSpriteRight();
             }
         }
 
@@ -203,6 +234,7 @@ namespace Frogger.Controller
             {
                 //this.Player.changeSprite(1);
                 this.Player.MoveUp();
+                this.turnSpriteUp();
             }
         }
 
@@ -215,8 +247,57 @@ namespace Frogger.Controller
         {
             if (this.Player.Y < (double)Application.Current.Resources["LowShoulderYLocation"])
             {
+                this.turnSpriteDown();
                 this.Player.MoveDown();
             }
+        }
+
+        #endregion
+
+        #region Spin Sprites
+
+        private void turnSpriteDown()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 180;
+        }
+
+        private void turnSpriteUp()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 360;
+        }
+
+        private void turnSpriteLeft()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = -90;
+        }
+
+        private void turnSpriteRight()
+        {
+            var height = (float)this.Player.Sprite.Height / 2;
+            var width = (float)this.Player.Sprite.Width / 2;
+
+            var vector = new Vector3(height, width, 1000);
+
+            this.Player.Sprite.CenterPoint = vector;
+            this.Player.Sprite.Rotation = 90;
         }
 
         #endregion
