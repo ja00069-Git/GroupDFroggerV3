@@ -20,6 +20,7 @@ namespace Frogger.Controller
         private DispatcherTimer lifeDispatcherTimer;
 
         private readonly LaneManager laneManager;
+        private readonly WaterCrossingManager waterCrossingManager;
         private readonly BonusTimeManager bonusTimeManager;
 
         private readonly LandingSpotManager landingSpotManager;
@@ -106,6 +107,7 @@ namespace Frogger.Controller
 
             this.PlayerManager = new PlayerManager(gameCanvas);
             this.laneManager = new LaneManager();
+            this.waterCrossingManager = new WaterCrossingManager(gameCanvas);
             this.soundEffects = new SoundEffects();
             this.bonusTimeManager = new BonusTimeManager(gameCanvas);
             this.landingSpotManager = new LandingSpotManager(gameCanvas);
@@ -211,7 +213,28 @@ namespace Frogger.Controller
             {
                 this.checkCollisionWithMushroom();
                 this.moveVehicle();
+                this.waterCrossingManager.MovePlanks();
+                this.playerCanLandInPlank();
                 this.updateScore();
+            }
+        }
+
+        private void playerCanLandInPlank()
+        {
+            var canLand = this.waterCrossingManager.canPlayerLand(this.PlayerManager.Player).Item1;
+            var plankLandedOn = this.waterCrossingManager.canPlayerLand(this.PlayerManager.Player).Item2;
+
+            switch (canLand)
+            {
+                case true:
+                    this.PlayerManager.Player.X = plankLandedOn.X;
+                    break;
+                case false:
+                    if (this.PlayerManager.Player.Y <= this.waterCrossingManager.WaterCrossing.Y + 50)
+                    {
+
+                    }
+                    break;
             }
         }
 

@@ -126,8 +126,11 @@
     <Compile Include="Controller\GameManager.cs" />
     <Compile Include="Controller\HighScoreBoard.cs" />
     <Compile Include="Controller\LandingSpotManager.cs" />
+    <Compile Include="Controller\WaterCrossingManager.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\BonusTimePowerUp.cs" />
+    <Compile Include="Model\Plank.cs" />
+    <Compile Include="Model\WaterCrossing.cs" />
     <Compile Include="ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Controller\LaneManager.cs" />
     <Compile Include="Controller\PlayerManager.cs" />
@@ -150,6 +153,9 @@
     </Compile>
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\PlankSprite.xaml.cs">
+      <DependentUpon>PlankSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\Vehicles\CarSprite.xaml.cs">
       <DependentUpon>CarSprite.xaml</DependentUpon>
@@ -187,6 +193,9 @@
     </Compile>
     <Compile Include="View\Sprites\Vehicles\TankSprite.xaml.cs">
       <DependentUpon>TankSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\WaterCrossingSprite.xaml.cs">
+      <DependentUpon>WaterCrossingSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
@@ -226,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\BaseSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\PlankSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -274,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\Vehicles\TankSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\WaterCrossingSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
