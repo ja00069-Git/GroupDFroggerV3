@@ -105,6 +105,15 @@ namespace Frogger.Controller
             this.saveHighScores();
         }
 
+        /// <summary>
+        ///     Clears the scores.
+        /// </summary>
+        public void ClearScores()
+        {
+            this.Scores.Clear();
+            this.saveHighScores();
+        }
+
         #endregion
     }
 }

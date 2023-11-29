@@ -36,19 +36,5 @@ namespace Frogger.View
         }
 
         #endregion
-
-        #region Methods
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(GamePage));
-        }
-
-        private void Start_Screen(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(StartPage));
-        }
-
-        #endregion
     }
 }
