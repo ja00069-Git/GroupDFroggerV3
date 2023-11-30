@@ -5,10 +5,10 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <x:Double x:Key="AppHeight">450</x:Double>
+            <x:Double x:Key="AppHeight">500</x:Double>
             <x:Double x:Key="AppWidth">650</x:Double>
             <x:Double x:Key="HighShoulderYLocation">55</x:Double>
-            <x:Double x:Key="LowShoulderYLocation">355</x:Double>
+            <x:Double x:Key="LowShoulderYLocation">405</x:Double>
         </ResourceDictionary>
     </Application.Resources>
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -17,7 +18,7 @@ namespace Frogger.Controller
         #region Data members
 
         private readonly double backgroundWidth = (double)Application.Current.Resources["AppWidth"];
-        private readonly IList<BaseSprite> deathFrameSprites;
+        private IList<BaseSprite> deathFrameSprites;
         private DispatcherTimer deathAnimationTimer;
         private int currentFrame;
 
@@ -65,6 +66,8 @@ namespace Frogger.Controller
         /// </value>
         public int Level { get; set; }
 
+        private SpriteDirection Direction { get; set; } = SpriteDirection.Up;
+
         #endregion
 
         #region Constructors
@@ -75,19 +78,7 @@ namespace Frogger.Controller
         {
             this.GameCanvas = gameCanvas;
 
-            this.deathFrameSprites = new List<BaseSprite>
-            {
-                new DeathSpriteFrame1(),
-                new DeathSpriteFrame2(),
-                new DeathSpriteFrame3(),
-                new DeathSpriteFrame4()
-            };
-
-            foreach (var deathFrameSprite in this.deathFrameSprites)
-            {
-                deathFrameSprite.Opacity = 0;
-                this.GameCanvas.Children.Add(deathFrameSprite);
-            }
+            this.setupDeathSprites();
 
             this.setupDeathTimer();
         }
@@ -117,55 +108,52 @@ namespace Frogger.Controller
 
         private void deathTimerOnTick(object sender, object e)
         {
-            switch (this.currentFrame)
+            if (this.currentFrame < this.deathFrameSprites.Count)
             {
-                case 0:
-                {
-                    this.Player.Sprite.Opacity = 0;
-                    this.deathFrameSprites[this.currentFrame].Opacity = 1;
-                    this.deathFrameSprites[this.currentFrame].RenderAt(this.Player.X, this.Player.Y);
-                    this.currentFrame++;
-                    break;
-                }
-                case 1:
-                {
-                    this.turnOffLastFrameAndTurnOnCurrentFrame();
-                    break;
-                }
-                case 2:
-                {
-                    this.turnOffLastFrameAndTurnOnCurrentFrame();
-                    break;
-                }
-                case 3:
-                {
-                    this.turnOffLastFrameAndTurnOnCurrentFrame();
-                    break;
-                }
-                case 4:
-                {
-                    this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
-                    this.deathAnimationTimer.Stop();
-                    this.currentFrame = 0;
-                    this.Player.Sprite.Opacity = 1;
-                    this.SetPlayerToCenterOfBottomShoulder();
-                    this.AnimationOver?.Invoke(this, EventArgs.Empty);
-                    break;
-                }
+                this.Player.Sprite.Opacity = 0;
+
+                this.updateFrameOpacity(this.currentFrame);
+                this.currentFrame++;
+            }
+            else
+            {
+                this.finishDeathAnimation();
+
+                this.Player.Sprite.Opacity = 1;
             }
         }
 
-        private void turnOffLastFrameAndTurnOnCurrentFrame()
+        private void updateFrameOpacity(int frameIndex)
         {
-            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0; 
-            this.deathFrameSprites[this.currentFrame].RenderAt(this.Player.X, this.Player.Y);
-            this.deathFrameSprites[this.currentFrame].Opacity = 1;
-            this.currentFrame++;
+            var currentFrame = this.deathFrameSprites[frameIndex];
+
+            if (frameIndex > 0)
+            {
+                this.deathFrameSprites[frameIndex - 1].Opacity = 0;
+            }
+
+            this.turnSprite(this.Direction, currentFrame);
+
+            currentFrame.RenderAt(this.Player.X, this.Player.Y);
+            currentFrame.Opacity = 1;
+        }
+
+        private void finishDeathAnimation()
+        {
+            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0;
+            this.deathAnimationTimer.Stop();
+            this.currentFrame = 0;
+            this.Player.Sprite.Opacity = 1;
+            this.turnSprite(SpriteDirection.Up, this.Player.Sprite);
+            this.SetPlayerToCenterOfBottomShoulder();
+            this.AnimationOver?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>Handles the death.</summary>
         public void HandleDeath()
         {
+            this.Lives--;
+
             this.deathAnimationTimer.Start();
             this.AnimationStarted?.Invoke(this, EventArgs.Empty);
         }
@@ -191,6 +179,22 @@ namespace Frogger.Controller
             this.Player.Y = (double)Application.Current.Resources["LowShoulderYLocation"];
         }
 
+        private void setupDeathSprites()
+        {
+            this.deathFrameSprites = new List<BaseSprite>
+            {
+                new DeathSpriteFrame1(),
+                new DeathSpriteFrame2(),
+                new DeathSpriteFrame3(),
+                new DeathSpriteFrame4()
+            };
+
+            foreach (var deathFrameSprite in this.deathFrameSprites)
+            {
+                deathFrameSprite.Opacity = 0;
+                this.GameCanvas.Children.Add(deathFrameSprite);
+            }
+        }
         #endregion
 
         #region Move Player
@@ -204,8 +208,8 @@ namespace Frogger.Controller
         {
             if (this.Player.X > 0)
             {
+                this.turnSprite(SpriteDirection.Left, this.Player.Sprite);
                 this.Player.MoveLeft();
-                this.turnSpriteLeft();
             }
         }
 
@@ -218,8 +222,8 @@ namespace Frogger.Controller
         {
             if (this.Player.X + this.Player.Width < this.backgroundWidth)
             {
+                this.turnSprite(SpriteDirection.Right, this.Player.Sprite);
                 this.Player.MoveRight();
-                this.turnSpriteRight();
             }
         }
 
@@ -232,9 +236,8 @@ namespace Frogger.Controller
         {
             if (this.Player.Y > (double)Application.Current.Resources["HighShoulderYLocation"])
             {
-                //this.Player.changeSprite(1);
+                this.turnSprite(SpriteDirection.Up, this.Player.Sprite);
                 this.Player.MoveUp();
-                this.turnSpriteUp();
             }
         }
 
@@ -247,7 +250,7 @@ namespace Frogger.Controller
         {
             if (this.Player.Y < (double)Application.Current.Resources["LowShoulderYLocation"])
             {
-                this.turnSpriteDown();
+                this.turnSprite(SpriteDirection.Down, this.Player.Sprite);
                 this.Player.MoveDown();
             }
         }
@@ -256,50 +259,55 @@ namespace Frogger.Controller
 
         #region Spin Sprites
 
-        private void turnSpriteDown()
+        private void setSpriteCenterPoint(BaseSprite sprite)
         {
-            var height = (float)this.Player.Sprite.Height / 2;
-            var width = (float)this.Player.Sprite.Width / 2;
+            var height = (float)sprite.Height / 2;
+            var width = (float)sprite.Width / 2;
 
             var vector = new Vector3(height, width, 1000);
 
-            this.Player.Sprite.CenterPoint = vector;
-            this.Player.Sprite.Rotation = 180;
+            sprite.CenterPoint = vector;
         }
 
-        private void turnSpriteUp()
+        private void turnSprite(SpriteDirection direction, BaseSprite sprite)
         {
-            var height = (float)this.Player.Sprite.Height / 2;
-            var width = (float)this.Player.Sprite.Width / 2;
+            this.setSpriteCenterPoint(sprite); // Set the center point
 
-            var vector = new Vector3(height, width, 1000);
-
-            this.Player.Sprite.CenterPoint = vector;
-            this.Player.Sprite.Rotation = 360;
+            switch (direction)
+            {
+                case SpriteDirection.Up:
+                    this.Direction = direction;
+                    sprite.Rotation = 360;
+                    break;
+                case SpriteDirection.Down:
+                    this.Direction = direction;
+                    sprite.Rotation = 180;
+                    break;
+                case SpriteDirection.Left:
+                    this.Direction = direction;
+                    sprite.Rotation = -90;
+                    break;
+                case SpriteDirection.Right:
+                    this.Direction = direction;
+                    sprite.Rotation = 90;
+                    break;
+            }
         }
-
-        private void turnSpriteLeft()
-        {
-            var height = (float)this.Player.Sprite.Height / 2;
-            var width = (float)this.Player.Sprite.Width / 2;
-
-            var vector = new Vector3(height, width, 1000);
-
-            this.Player.Sprite.CenterPoint = vector;
-            this.Player.Sprite.Rotation = -90;
-        }
-
-        private void turnSpriteRight()
-        {
-            var height = (float)this.Player.Sprite.Height / 2;
-            var width = (float)this.Player.Sprite.Width / 2;
-
-            var vector = new Vector3(height, width, 1000);
-
-            this.Player.Sprite.CenterPoint = vector;
-            this.Player.Sprite.Rotation = 90;
-        }
-
         #endregion
+    }
+
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    public enum SpriteDirection
+    {
+        /// <summary>Up</summary>
+        Up,
+        /// <summary>Down</summary>
+        Down,
+        /// <summary>Left</summary>
+        Left,
+        /// <summary>Right</summary>
+        Right
     }
 }

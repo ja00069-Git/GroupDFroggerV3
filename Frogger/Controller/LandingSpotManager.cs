@@ -6,24 +6,26 @@ using Frogger.Model;
 namespace Frogger.Controller
 {
     /// <summary>
-    /// Manages the home landing spots
+    ///     Manages the home landing spots
     /// </summary>
     public class LandingSpotManager
     {
-        #region Data members        
+        #region Properties
+
         /// <summary>
-        /// Gets the home landing spots.
+        ///     Gets the home landing spots.
         /// </summary>
         /// <value>
-        /// The home landing spots.
+        ///     The home landing spots.
         /// </value>
         public IList<HomeLandingSpot> HomeLandingSpots { get; }
 
         #endregion
 
-        #region Constructors        
+        #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="LandingSpotManager"/> class.
+        ///     Initializes a new instance of the <see cref="LandingSpotManager" /> class.
         /// </summary>
         /// <param name="gameCanvas">The game canvas.</param>
         public LandingSpotManager(Canvas gameCanvas)
@@ -34,9 +36,10 @@ namespace Frogger.Controller
 
         #endregion
 
-        #region Methods        
+        #region Methods
+
         /// <summary>
-        /// Creates the home landing spots.
+        ///     Creates the home landing spots.
         /// </summary>
         /// <param name="gameCanvas">The game canvas.</param>
         public void CreateHomeLandingSpots(Canvas gameCanvas)
@@ -58,7 +61,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Alls the home landing spots occupied.
+        ///     Alls the home landing spots occupied.
         /// </summary>
         /// <returns>True if all the landing spots are occupied</returns>
         public bool AllHomeLandingSpotsOccupied()
@@ -75,7 +78,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        /// Uns the occupy home landing spots.
+        ///     Uns the occupy home landing spots.
         /// </summary>
         public void UnOccupyHomeLandingSpots()
         {
