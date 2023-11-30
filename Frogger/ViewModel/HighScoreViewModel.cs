@@ -30,6 +30,8 @@ namespace Frogger.ViewModel
 
         private readonly HighScore highScore;
         private HighScore selectedHighScore;
+        private bool hasAddedScore;
+
 
         #endregion
 
@@ -211,7 +213,17 @@ namespace Frogger.ViewModel
         {
             this.scoreBoard.ClearScores();
             this.updateListView();
+            this.updateCommandsStatusOnClear();
+        }
+
+        private void updateCommandsStatusOnClear()
+        {
+            this.SortByScoreCommand.OnCanExecuteChanged();
+            this.SortByLevelCommand.OnCanExecuteChanged();
+            this.SortByNameCommand.OnCanExecuteChanged();
             this.ClearBoardCommand.OnCanExecuteChanged();
+            this.ClearBoardCommand.OnCanExecuteChanged();
+
         }
 
         private bool canStartScreen(object obj)
@@ -237,12 +249,13 @@ namespace Frogger.ViewModel
             if (Window.Current.Content is Frame rootFrame)
             {
                 rootFrame.Navigate(typeof(GamePage));
+                this.hasAddedScore = false;
             }
         }
 
         private bool canAddScore(object obj)
         {
-            return true;
+            return !this.hasAddedScore && this.highScore.Score != 0 | this.highScore.LevelCompleted > 0;
         }
 
         private void addScore(object obj)
@@ -251,8 +264,9 @@ namespace Frogger.ViewModel
             this.scoreBoard.AddScore(this.highScore);
 
             this.updateListView();
-            this.updateCommandsStatusOnAdd();
             this.PlayerName = string.Empty;
+            this.hasAddedScore = true;
+            this.updateCommandsStatusOnAdd();
         }
 
         private void updateCommandsStatusOnAdd()
@@ -261,6 +275,7 @@ namespace Frogger.ViewModel
             this.SortByLevelCommand.OnCanExecuteChanged();
             this.SortByNameCommand.OnCanExecuteChanged();
             this.ClearBoardCommand.OnCanExecuteChanged();
+            this.AddCommand.OnCanExecuteChanged();
         }
 
         private void updateListView()
