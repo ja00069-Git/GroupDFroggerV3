@@ -79,17 +79,28 @@ namespace Frogger.Controller
             }
         }
 
-        public (bool, Plank) canPlayerLand(GameObject player)
+        private void isSage()
         {
-            (bool, Plank) canLand = (false, null);
+            foreach (var plank in this.planks)
+            {
+                
+            }
+        }
+
+
+        public (bool, double) CanPlayerLand(GameObject player)
+        {
+            var canLand = (false, 0.0);
 
             foreach (var plank in this.planks)
             {
                 if (plank.CheckCollision(player))
                 {
-                    canLand = (true, plank);
+                    canLand = (true, plank.X);
                     return canLand;
                 }
+
+                canLand = (false, player.X);
             }
 
             return canLand;

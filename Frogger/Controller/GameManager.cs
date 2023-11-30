@@ -139,8 +139,7 @@ namespace Frogger.Controller
         /// </summary>
         public void ResetGame()
         {
-            this.gameTimer.Stop();
-            this.lifeDispatcherTimer.Stop();
+            this.stopAllTimers();
 
             this.laneManager.ClearLanesAndVehicles(this.GameCanvas);
 
@@ -148,10 +147,24 @@ namespace Frogger.Controller
 
             this.resetGameStats();
 
-            this.gameTimer.Start();
-            this.lifeDispatcherTimer.Start();
+            this.startAllTimers();
 
             this.configureLevelParameters();
+        }
+
+        private void startAllTimers()
+        {
+            if (!this.isGameOver)
+            {
+                this.gameTimer.Start();
+                this.lifeDispatcherTimer.Start();
+            }
+        }
+
+        private void stopAllTimers()
+        {
+            this.gameTimer.Stop();
+            this.lifeDispatcherTimer.Stop();
         }
 
         private void startGameAfterDeathAnimation(object sender, EventArgs e)
@@ -221,19 +234,15 @@ namespace Frogger.Controller
 
         private void playerCanLandInPlank()
         {
-            var canLand = this.waterCrossingManager.canPlayerLand(this.PlayerManager.Player).Item1;
-            var plankLandedOn = this.waterCrossingManager.canPlayerLand(this.PlayerManager.Player).Item2;
+            var canLand = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item1;
+            var plankLandedOn = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item2;
 
             switch (canLand)
             {
                 case true:
-                    this.PlayerManager.Player.X = plankLandedOn.X;
+                    this.PlayerManager.Player.X = plankLandedOn;
                     break;
                 case false:
-                    if (this.PlayerManager.Player.Y <= this.waterCrossingManager.WaterCrossing.Y + 50)
-                    {
-
-                    }
                     break;
             }
         }
@@ -275,21 +284,6 @@ namespace Frogger.Controller
 
                     break;
             }
-        }
-
-        private void startAllTimers()
-        {
-            if (!this.isGameOver)
-            {
-                this.gameTimer.Start();
-                this.lifeDispatcherTimer.Start();
-            }
-        }
-
-        private void stopAllTimers()
-        {
-            this.gameTimer.Stop();
-            this.lifeDispatcherTimer.Stop();
         }
 
         private void checkCollisionWithMushroom()
@@ -351,7 +345,6 @@ namespace Frogger.Controller
         {
             this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
-            this.Lives--;
             this.onLivesUpdated();
             this.TimeCountDown = LandHomeIn;
         }
