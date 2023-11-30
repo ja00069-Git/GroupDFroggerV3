@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -19,7 +18,9 @@ namespace Frogger.Controller
 
         private readonly double backgroundWidth = (double)Application.Current.Resources["AppWidth"];
         private IList<BaseSprite> deathFrameSprites;
+        private IList<BaseSprite> movementAnimationSprites;
         private DispatcherTimer deathAnimationTimer;
+        private DispatcherTimer movementAnimationTimer;
         private int currentFrame;
 
         #endregion
@@ -79,13 +80,15 @@ namespace Frogger.Controller
             this.GameCanvas = gameCanvas;
 
             this.setupDeathSprites();
+            this.setupAnimationSprites();
 
             this.setupDeathTimer();
+            this.setupMovementTimer();
         }
 
         #endregion
 
-        #region Methods
+        #region Event Handlers
 
         /// <summary>
         ///     Occurs when [death animation started].
@@ -97,59 +100,13 @@ namespace Frogger.Controller
         /// </summary>
         public event EventHandler AnimationOver;
 
-        private void setupDeathTimer()
-        {
-            this.deathAnimationTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(500)
-            };
-            this.deathAnimationTimer.Tick += this.deathTimerOnTick;
-        }
+        #endregion
 
-        private void deathTimerOnTick(object sender, object e)
-        {
-            if (this.currentFrame < this.deathFrameSprites.Count)
-            {
-                this.Player.Sprite.Opacity = 0;
+        #region Methods
 
-                this.updateFrameOpacity(this.currentFrame);
-                this.currentFrame++;
-            }
-            else
-            {
-                this.finishDeathAnimation();
-
-                this.Player.Sprite.Opacity = 1;
-            }
-        }
-
-        private void updateFrameOpacity(int frameIndex)
-        {
-            var currentFrame = this.deathFrameSprites[frameIndex];
-
-            if (frameIndex > 0)
-            {
-                this.deathFrameSprites[frameIndex - 1].Opacity = 0;
-            }
-
-            this.turnSprite(this.Direction, currentFrame);
-
-            currentFrame.RenderAt(this.Player.X, this.Player.Y);
-            currentFrame.Opacity = 1;
-        }
-
-        private void finishDeathAnimation()
-        {
-            this.deathFrameSprites[this.currentFrame - 1].Opacity = 0;
-            this.deathAnimationTimer.Stop();
-            this.currentFrame = 0;
-            this.Player.Sprite.Opacity = 1;
-            this.turnSprite(SpriteDirection.Up, this.Player.Sprite);
-            this.SetPlayerToCenterOfBottomShoulder();
-            this.AnimationOver?.Invoke(this, EventArgs.Empty);
-        }
-
-        /// <summary>Handles the death.</summary>
+        /// <summary>
+        ///     Handles the death.
+        /// </summary>
         public void HandleDeath()
         {
             this.Lives--;
@@ -175,8 +132,101 @@ namespace Frogger.Controller
         /// </summary>
         public void SetPlayerToCenterOfBottomShoulder()
         {
+            this.turnSprite(SpriteDirection.Up, this.Player.Sprite);
             this.Player.X = this.backgroundWidth / 2 - this.Player.Width / 2;
             this.Player.Y = (double)Application.Current.Resources["LowShoulderYLocation"];
+        }
+
+        private void deathTimerOnTick(object sender, object e)
+        {
+            this.updateAnimationFrame(this.deathFrameSprites,
+                this.deathAnimationTimer, this.finishDeathAnimation);
+        }
+
+        private void movementAnimationTimerOnTick(object sender, object e)
+        {
+            this.updateAnimationFrame(this.movementAnimationSprites,
+                this.movementAnimationTimer, this.finishMovementAnimation);
+        }
+
+        private void updateAnimationFrame(IList<BaseSprite> frames, DispatcherTimer timer, Action finishAction)
+        {
+            this.Player.Sprite.Opacity = 0;
+            
+            if (this.currentFrame < frames.Count)
+            {
+                if (this.currentFrame > 0)
+                {
+                    frames[this.currentFrame - 1].Opacity = 0;
+                }
+
+                var currentSprite = frames[this.currentFrame];
+                currentSprite.RenderAt(this.Player.X, this.Player.Y);
+                this.turnSprite(this.Direction, currentSprite);
+                currentSprite.Opacity = 1;
+
+                this.currentFrame++;
+            }
+            else
+            {
+                finishAction();
+            }
+        }
+
+        private void startMovementAnimation()
+        {
+            this.currentFrame = 0;
+            this.movementAnimationTimer.Start();
+        }
+
+        private void updateFrameOpacity(int frameIndex)
+        {
+            var currentFrame = this.deathFrameSprites[frameIndex];
+
+            if (frameIndex > 0)
+            {
+                this.deathFrameSprites[frameIndex - 1].Opacity = 0;
+            }
+
+            this.turnSprite(this.Direction, currentFrame);
+
+            currentFrame.RenderAt(this.Player.X, this.Player.Y);
+            currentFrame.Opacity = 1;
+        }
+
+        private void finishDeathAnimation()
+        {
+            foreach (var sprite in this.deathFrameSprites)
+            {
+                sprite.Opacity = 0; // Reset all death animation frames
+            }
+
+            this.deathAnimationTimer.Stop();
+            this.currentFrame = 0;
+            this.Player.Sprite.Opacity = 1; // Make the player sprite visible again
+            this.SetPlayerToCenterOfBottomShoulder();
+            this.AnimationOver?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void finishMovementAnimation()
+        {
+            foreach (var sprite in this.movementAnimationSprites)
+            {
+                sprite.Opacity = 0; // Reset all movement animation frames
+            }
+
+            this.movementAnimationTimer.Stop();
+            this.currentFrame = 0;
+            this.Player.Sprite.Opacity = 1; // Make the player sprite visible again
+        }
+
+        private void addSpritesToCanvas(IList<BaseSprite> sprites)
+        {
+            foreach (var sprite in sprites)
+            {
+                sprite.Opacity = 0;
+                this.GameCanvas.Children.Add(sprite);
+            }
         }
 
         private void setupDeathSprites()
@@ -189,12 +239,38 @@ namespace Frogger.Controller
                 new DeathSpriteFrame4()
             };
 
-            foreach (var deathFrameSprite in this.deathFrameSprites)
-            {
-                deathFrameSprite.Opacity = 0;
-                this.GameCanvas.Children.Add(deathFrameSprite);
-            }
+            this.addSpritesToCanvas(this.deathFrameSprites);
         }
+
+        private void setupAnimationSprites()
+        {
+            this.movementAnimationSprites = new List<BaseSprite>
+            {
+                new FrogAnimationSprite1(),
+                new FrogAnimationSprite2()
+            };
+
+            this.addSpritesToCanvas(this.movementAnimationSprites);
+        }
+
+        private void setupDeathTimer()
+        {
+            this.deathAnimationTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(500)
+            };
+            this.deathAnimationTimer.Tick += this.deathTimerOnTick;
+        }
+
+        private void setupMovementTimer()
+        {
+            this.movementAnimationTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(50)
+            };
+            this.movementAnimationTimer.Tick += this.movementAnimationTimerOnTick;
+        }
+
         #endregion
 
         #region Move Player
@@ -210,6 +286,7 @@ namespace Frogger.Controller
             {
                 this.turnSprite(SpriteDirection.Left, this.Player.Sprite);
                 this.Player.MoveLeft();
+                this.startMovementAnimation();
             }
         }
 
@@ -224,6 +301,7 @@ namespace Frogger.Controller
             {
                 this.turnSprite(SpriteDirection.Right, this.Player.Sprite);
                 this.Player.MoveRight();
+                this.startMovementAnimation();
             }
         }
 
@@ -238,6 +316,7 @@ namespace Frogger.Controller
             {
                 this.turnSprite(SpriteDirection.Up, this.Player.Sprite);
                 this.Player.MoveUp();
+                this.startMovementAnimation();
             }
         }
 
@@ -252,12 +331,13 @@ namespace Frogger.Controller
             {
                 this.turnSprite(SpriteDirection.Down, this.Player.Sprite);
                 this.Player.MoveDown();
+                this.startMovementAnimation();
             }
         }
 
         #endregion
 
-        #region Spin Sprites
+        #region Turn Sprites
 
         private void setSpriteCenterPoint(BaseSprite sprite)
         {
@@ -271,42 +351,28 @@ namespace Frogger.Controller
 
         private void turnSprite(SpriteDirection direction, BaseSprite sprite)
         {
-            this.setSpriteCenterPoint(sprite); // Set the center point
-
-            switch (direction)
-            {
-                case SpriteDirection.Up:
-                    this.Direction = direction;
-                    sprite.Rotation = (int)direction;
-                    break;
-                case SpriteDirection.Down:
-                    this.Direction = direction;
-                    sprite.Rotation = (int)direction;
-                    break;
-                case SpriteDirection.Left:
-                    this.Direction = direction;
-                    sprite.Rotation = (int)direction;
-                    break;
-                case SpriteDirection.Right:
-                    this.Direction = direction;
-                    sprite.Rotation = (int)direction;
-                    break;
-            }
+            this.setSpriteCenterPoint(sprite);
+            this.Direction = direction;
+            sprite.Rotation = (int)direction;
         }
+
         #endregion
     }
 
     /// <summary>
-    ///   <br />
+    ///     <br />
     /// </summary>
     public enum SpriteDirection
     {
         /// <summary>Up</summary>
         Up = 360,
+
         /// <summary>Down</summary>
         Down = 180,
+
         /// <summary>Left</summary>
         Left = -90,
+
         /// <summary>Right</summary>
         Right = 90
     }
