@@ -8,7 +8,7 @@ namespace Frogger.View.Sprites
     /// <seealso cref="Frogger.View.Sprites.BaseSprite" />
     /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector" />
     /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
-    public sealed partial class FrogSprite
+    public partial class FrogSprite
     {
         #region Constructors
 

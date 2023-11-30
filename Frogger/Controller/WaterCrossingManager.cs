@@ -22,6 +22,9 @@ namespace Frogger.Controller
 
         #region Properties
 
+
+        /// <summary>Gets the water crossing.</summary>
+        /// <value>The water crossing.</value>
         public WaterCrossing WaterCrossing { get; }
 
         #endregion
@@ -78,15 +81,6 @@ namespace Frogger.Controller
                 }
             }
         }
-
-        private void isSage()
-        {
-            foreach (var plank in this.planks)
-            {
-                
-            }
-        }
-
 
         public (bool, double) CanPlayerLand(GameObject player)
         {

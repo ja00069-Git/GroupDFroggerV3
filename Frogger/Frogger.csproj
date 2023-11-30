@@ -144,6 +144,9 @@
     <Compile Include="Model\PowerUp.cs" />
     <Compile Include="Model\Vehicle.cs" />
     <Compile Include="Model\VehicleType.cs" />
+    <Compile Include="View\Sprites\FrogAnimationSprite1.xaml.cs">
+      <DependentUpon>FrogAnimationSprite1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,9 @@
     </Compile>
     <Compile Include="View\Sprites\BaseSprite.xaml.cs">
       <DependentUpon>BaseSprite.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Sprites\FrogAnimationSprite2.xaml.cs">
+      <DependentUpon>FrogAnimationSprite2.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Sprites\PlankSprite.xaml.cs">
       <DependentUpon>PlankSprite.xaml</DependentUpon>
@@ -220,12 +226,17 @@
     <Content Include="Sounds\frogger-dying-sound.wav" />
     <Content Include="Sounds\frogger-gameOver-sound.wav" />
     <Content Include="Sounds\frogger-powerUp-sound.wav" />
+    <Content Include="View\Images\start_screen.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Sprites\FrogAnimationSprite1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\GamePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -235,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Sprites\BaseSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Sprites\FrogAnimationSprite2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -307,9 +322,7 @@
       <Version>7.0.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
