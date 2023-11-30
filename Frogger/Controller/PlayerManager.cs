@@ -230,7 +230,7 @@ namespace Frogger.Controller
         /// <summary>
         ///     Moves the player up.
         ///     Precondition: none
-        ///     Postcondition: player.Y = player.Y@prev - player.Height
+        ///     Post condition: player.Y = player.Y@prev - player.Height
         /// </summary>
         public void MovePlayerUp()
         {
@@ -244,7 +244,7 @@ namespace Frogger.Controller
         /// <summary>
         ///     Moves the player down.
         ///     Precondition: none
-        ///     Postcondition: player.Y = player.Y@prev + player.Height
+        ///     Post condition: player.Y = player.Y@prev + player.Height
         /// </summary>
         public void MovePlayerDown()
         {
@@ -277,19 +277,19 @@ namespace Frogger.Controller
             {
                 case SpriteDirection.Up:
                     this.Direction = direction;
-                    sprite.Rotation = 360;
+                    sprite.Rotation = (int)direction;
                     break;
                 case SpriteDirection.Down:
                     this.Direction = direction;
-                    sprite.Rotation = 180;
+                    sprite.Rotation = (int)direction;
                     break;
                 case SpriteDirection.Left:
                     this.Direction = direction;
-                    sprite.Rotation = -90;
+                    sprite.Rotation = (int)direction;
                     break;
                 case SpriteDirection.Right:
                     this.Direction = direction;
-                    sprite.Rotation = 90;
+                    sprite.Rotation = (int)direction;
                     break;
             }
         }
@@ -302,12 +302,12 @@ namespace Frogger.Controller
     public enum SpriteDirection
     {
         /// <summary>Up</summary>
-        Up,
+        Up = 360,
         /// <summary>Down</summary>
-        Down,
+        Down = 180,
         /// <summary>Left</summary>
-        Left,
+        Left = -90,
         /// <summary>Right</summary>
-        Right
+        Right = 90
     }
 }

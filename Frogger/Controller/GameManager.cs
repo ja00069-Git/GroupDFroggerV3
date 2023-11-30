@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
@@ -343,10 +344,15 @@ namespace Frogger.Controller
 
         private async void handleCollision()
         {
+            await this.handleDeath();
+        }
+
+        private async Task handleDeath()
+        {
+            this.TimeCountDown = LandHomeIn;
             this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
             this.onLivesUpdated();
-            this.TimeCountDown = LandHomeIn;
         }
 
         private void updateScore()
@@ -380,12 +386,9 @@ namespace Frogger.Controller
             }
         }
 
-        private void handleDintLandingHome()
+        private async void handleDintLandingHome()
         {
-            this.TimeCountDown = LandHomeIn;
-            this.Lives--;
-            this.onLivesUpdated();
-            this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
+            await this.handleDeath();
         }
 
         private async void handleLandingHome()
@@ -460,10 +463,7 @@ namespace Frogger.Controller
             this.TimeOut?.Invoke(this, EventArgs.Empty);
             if (this.TimeCountDown == 0)
             {
-                this.TimeCountDown = LandHomeIn;
-                this.Lives--;
-                this.onLivesUpdated();
-                await this.soundEffects.DyingSound();
+                await this.handleDeath();
                 this.lifeDispatcherTimer.Start();
             }
 

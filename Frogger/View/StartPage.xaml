@@ -10,10 +10,13 @@
     <UserControl.Resources>
     </UserControl.Resources>
 
-    <Canvas Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" Background="Chartreuse">
-        <Button Content="Start Game" Canvas.Left="278" Canvas.Top="203" VerticalAlignment="Top" Background="Gray"
-                Click="startGameButtonClick" />
-        <Button Content="Score Board" Canvas.Left="275" Canvas.Top="275" VerticalAlignment="Top" Background="Gray"
-                Click="scoreBoardButtonClick" />
+    <Canvas Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" Background="Transparent">
+
+        <Image Source="Images/start_screen.png" Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}"/>
+
+        <Button Content="" Canvas.Left="230" Canvas.Top="265" Background="Transparent"
+                Click="startGameButtonClick" Width="174" Height="35" VerticalAlignment="Top" />
+        <Button Content="" Canvas.Left="230" Canvas.Top="305" Background="Transparent"
+                Click="scoreBoardButtonClick" Width="174" HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" />
     </Canvas>
 </Page>

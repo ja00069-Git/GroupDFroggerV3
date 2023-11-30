@@ -220,6 +220,7 @@
     <Content Include="Sounds\frogger-dying-sound.wav" />
     <Content Include="Sounds\frogger-gameOver-sound.wav" />
     <Content Include="Sounds\frogger-powerUp-sound.wav" />
+    <Content Include="View\Images\start_screen.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -307,9 +308,7 @@
       <Version>7.0.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
