@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
+using Frogger.Util;
 
 namespace Frogger.Controller
 {
@@ -107,8 +108,8 @@ namespace Frogger.Controller
             this.setupLifeTimer();
 
             this.PlayerManager = new PlayerManager(gameCanvas);
-            this.laneManager = new LaneManager();
             this.waterCrossingManager = new WaterCrossingManager(gameCanvas);
+            this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
             this.bonusTimeManager = new BonusTimeManager(gameCanvas);
             this.landingSpotManager = new LandingSpotManager(gameCanvas);
@@ -125,7 +126,7 @@ namespace Frogger.Controller
         ///     Initializes the game working with appropriate classes to place frog
         ///     and vehicle on game screen.
         ///     Precondition: gameCanvas != null
-        ///     Postcondition: Game is initialized and ready for play.
+        ///     Post condition: Game is initialized and ready for play.
         /// </summary>
         /// <exception cref="ArgumentNullException">gameCanvas</exception>
         public void InitializeGame()
@@ -233,19 +234,22 @@ namespace Frogger.Controller
             }
         }
 
-        private void playerCanLandInPlank()
+        private async void playerCanLandInPlank()
         {
-            /*var canLand = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item1;
-            var plankLandedOn = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item2;
+            var player = this.PlayerManager.Player;
+            var (canLand, plank) = this.waterCrossingManager.CanPlayerLand(player);
 
-            switch (canLand)
+            if (canLand)
             {
-                case true:
-                    this.PlayerManager.Player.X = plankLandedOn;
-                    break;
-                case false:
-                    break;
-            }*/
+                player.X = plank.X;
+            }
+            else
+            {
+                if (player.Y < GameConstants.WaterCrossingBottomY && player.Y > GameConstants.WaterCrossingTopY)
+                {
+                    await this.handleDeath();
+                }
+            }
         }
 
         private void configureLevelParameters()

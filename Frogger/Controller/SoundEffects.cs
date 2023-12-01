@@ -47,7 +47,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        ///     Dyings the sound.
+        ///     Dying sound.
         /// </summary>
         public async Task DyingSound()
         {

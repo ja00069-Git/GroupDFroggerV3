@@ -61,7 +61,7 @@ namespace Frogger.Controller
         }
 
         /// <summary>
-        ///     Alls the home landing spots occupied.
+        ///     All the home landing spots occupied.
         /// </summary>
         /// <returns>True if all the landing spots are occupied</returns>
         public bool AllHomeLandingSpotsOccupied()

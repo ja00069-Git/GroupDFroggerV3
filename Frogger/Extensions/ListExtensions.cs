@@ -10,7 +10,7 @@ namespace Frogger.Extensions
     {
         #region Methods
 
-        /// <summary>Converts to observablecollection.</summary>
+        /// <summary>Converts to observable collection.</summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection">The collection.</param>
         /// <returns>

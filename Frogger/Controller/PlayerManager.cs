@@ -125,17 +125,15 @@ namespace Frogger.Controller
 
         private void deathTimerOnTick(object sender, object e)
         {
-            this.updateAnimationFrame(this.deathFrameSprites,
-                this.deathAnimationTimer, this.finishDeathAnimation);
+            this.updateAnimationFrame(this.deathFrameSprites, this.finishDeathAnimation);
         }
 
         private void movementAnimationTimerOnTick(object sender, object e)
         {
-            this.updateAnimationFrame(this.movementAnimationSprites,
-                this.movementAnimationTimer, this.finishMovementAnimation);
+            this.updateAnimationFrame(this.movementAnimationSprites, this.finishMovementAnimation);
         }
 
-        private void updateAnimationFrame(IList<BaseSprite> frames, DispatcherTimer timer, Action finishAction)
+        private void updateAnimationFrame(IList<BaseSprite> frames, Action finishAction)
         {
             this.Player.Sprite.Opacity = 0;
 
@@ -278,7 +276,7 @@ namespace Frogger.Controller
         /// <summary>
         ///     Moves the player to the left.
         ///     Precondition: none
-        ///     Postcondition: player.X = player.X@prev - player.Width
+        ///     Post condition: player.X = player.X@prev - player.Width
         /// </summary>
         public void MovePlayerLeft()
         {
@@ -293,7 +291,7 @@ namespace Frogger.Controller
         /// <summary>
         ///     Moves the player to the right.
         ///     Precondition: none
-        ///     Postcondition: player.X = player.X@prev + player.Width
+        ///     Post condition: player.X = player.X@prev + player.Width
         /// </summary>
         public void MovePlayerRight()
         {

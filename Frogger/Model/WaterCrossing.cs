@@ -13,11 +13,9 @@ namespace Frogger.Model
     {
         #region Properties
 
-
         /// <summary>Gets the planks.</summary>
         /// <value>The planks.</value>
         public List<Plank> Planks { get; }
-
 
         /// <summary>Gets the water direction.</summary>
         /// <value>The water direction.</value>
@@ -26,7 +24,6 @@ namespace Frogger.Model
         #endregion
 
         #region Constructors
-
 
         /// <summary>Initializes a new instance of the <see cref="WaterCrossing" /> class.</summary>
         /// <param name="direction">The direction.</param>
@@ -41,7 +38,6 @@ namespace Frogger.Model
 
         #region Methods
 
-
         /// <summary>Adds the plank.</summary>
         /// <param name="plank">The plank.</param>
         public void AddPlank(Plank plank)
@@ -49,7 +45,6 @@ namespace Frogger.Model
             plank.SetSpeed(GameConstants.PlankBaseSpeed, GameConstants.PlankBaseSpeed);
             this.Planks.Add(plank);
         }
-
 
         /// <summary>Moves the planks.</summary>
         public void MovePlanks()
@@ -80,13 +75,11 @@ namespace Frogger.Model
         #endregion
     }
 
-
     /// <summary>
-    ///   Possible Water Crossing directions
+    ///     Possible Water Crossing directions
     /// </summary>
     public enum Direction
     {
-
         /// <summary>The right</summary>
         Right,
 
