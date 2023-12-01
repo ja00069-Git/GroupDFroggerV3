@@ -98,7 +98,7 @@ namespace Frogger.Model
         /// <summary>
         ///     Moves the game object right.
         ///     Precondition: None
-        ///     Postcondition: X == X@prev + SpeedX
+        ///     Post condition: X == X@prev + SpeedX
         /// </summary>
         public void MoveRight()
         {
@@ -108,7 +108,7 @@ namespace Frogger.Model
         /// <summary>
         ///     Moves the game object left.
         ///     Precondition: None
-        ///     Postcondition: X == X@prev + SpeedX
+        ///     Post condition: X == X@prev + SpeedX
         /// </summary>
         public void MoveLeft()
         {
@@ -118,7 +118,7 @@ namespace Frogger.Model
         /// <summary>
         ///     Moves the game object up.
         ///     Precondition: None
-        ///     Postcondition: Y == Y@prev - SpeedY
+        ///     Post condition: Y == Y@prev - SpeedY
         /// </summary>
         public void MoveUp()
         {
@@ -128,7 +128,7 @@ namespace Frogger.Model
         /// <summary>
         ///     Moves the game object down.
         ///     Precondition: None
-        ///     Postcondition: Y == Y@prev + SpeedY
+        ///     Post condition: Y == Y@prev + SpeedY
         /// </summary>
         public void MoveDown()
         {
@@ -153,7 +153,7 @@ namespace Frogger.Model
         /// <summary>
         ///     Sets the speed of the game object.
         ///     Precondition: speedX >= 0 AND speedY >=0
-        ///     Postcondition: SpeedX == speedX AND SpeedY == speedY
+        ///     Post condition: SpeedX == speedX AND SpeedY == speedY
         /// </summary>
         /// <param name="speedX">The speed x.</param>
         /// <param name="speedY">The speed y.</param>

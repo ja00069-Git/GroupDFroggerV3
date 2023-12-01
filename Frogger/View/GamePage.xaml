@@ -19,15 +19,15 @@
                    Width="{StaticResource AppWidth}" Height="55" />
 
         <!-- HUD Elements -->
-        <TextBlock Canvas.Left="475" FontSize="20" Text="Lives: " Canvas.Top="15" HorizontalAlignment="Left"
+        <TextBlock Canvas.Left="446" FontSize="20" Text="Lives: " Canvas.Top="15" HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
-        <TextBlock x:Name="lives" Canvas.Left="527" FontSize="20" Text="4" Canvas.Top="15" HorizontalAlignment="Center"
-                   VerticalAlignment="Top" />
+        <TextBlock x:Name="lives" Canvas.Left="498" FontSize="20" Text="4" Canvas.Top="15" HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
         <TextBlock Canvas.Left="290" Foreground="Green" FontSize="20" Text="Frogger" Canvas.Top="15"
                    HorizontalAlignment="Left" VerticalAlignment="Center" />
-        <TextBlock Canvas.Left="560" FontSize="20" Text="Score:" Canvas.Top="15" HorizontalAlignment="Left"
+        <TextBlock Canvas.Left="531" FontSize="20" Text="Score:" Canvas.Top="15" HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
-        <TextBlock x:Name="score" Canvas.Left="619" FontSize="20" Text="0" Canvas.Top="15" HorizontalAlignment="Left"
+        <TextBlock x:Name="score" Canvas.Left="590" FontSize="20" Text="0" Canvas.Top="15" HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
         <TextBlock Canvas.Left="8" FontSize="20" Text="Level:" Canvas.Top="15" HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
@@ -39,11 +39,11 @@
                    HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="246" Canvas.Top="205" />
 
         <!-- Life timer TextBlock -->
-        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="415" HorizontalAlignment="Center" VerticalAlignment="Top"
-                   Canvas.Left="3" />
-        <TextBlock x:Name="timerTexBlock" Canvas.Left="62" Text="20" FontSize="20" Canvas.Top="415"
-                   HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.621,0.747" />
-        <Button Content="Play Again" Canvas.Left="281" Canvas.Top="413" VerticalAlignment="Top" Background="Gray"
-                Click="playAgainButtonClick" />
+        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="563" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Canvas.Left="28" />
+        <TextBlock x:Name="timerTexBlock" Canvas.Left="90" Text="20" FontSize="20" Canvas.Top="563"
+                   HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.621,0.747" />
+        <Button Content="Reset Game" FontSize="12" Canvas.Left="279" Canvas.Top="563" Background="Gray"
+                Click="playAgainButtonClick" Height="29" Width="95" VerticalAlignment="Top" />
     </Canvas>
 </Page>

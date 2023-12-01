@@ -32,7 +32,6 @@ namespace Frogger.ViewModel
         private HighScore selectedHighScore;
         private bool hasAddedScore;
 
-
         #endregion
 
         #region Properties
@@ -223,7 +222,6 @@ namespace Frogger.ViewModel
             this.SortByNameCommand.OnCanExecuteChanged();
             this.ClearBoardCommand.OnCanExecuteChanged();
             this.ClearBoardCommand.OnCanExecuteChanged();
-
         }
 
         private bool canStartScreen(object obj)
@@ -255,7 +253,7 @@ namespace Frogger.ViewModel
 
         private bool canAddScore(object obj)
         {
-            return !this.hasAddedScore && this.highScore.Score != 0 | this.highScore.LevelCompleted > 0;
+            return !this.hasAddedScore && (this.highScore.Score != 0) | (this.highScore.LevelCompleted > 0);
         }
 
         private void addScore(object obj)

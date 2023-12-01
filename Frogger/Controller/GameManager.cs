@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
+using Frogger.Util;
 
 namespace Frogger.Controller
 {
@@ -20,6 +22,7 @@ namespace Frogger.Controller
         private DispatcherTimer lifeDispatcherTimer;
 
         private readonly LaneManager laneManager;
+        private readonly WaterCrossingManager waterCrossingManager;
         private readonly BonusTimeManager bonusTimeManager;
 
         private readonly LandingSpotManager landingSpotManager;
@@ -105,6 +108,7 @@ namespace Frogger.Controller
             this.setupLifeTimer();
 
             this.PlayerManager = new PlayerManager(gameCanvas);
+            this.waterCrossingManager = new WaterCrossingManager(gameCanvas);
             this.laneManager = new LaneManager();
             this.soundEffects = new SoundEffects();
             this.bonusTimeManager = new BonusTimeManager(gameCanvas);
@@ -122,7 +126,7 @@ namespace Frogger.Controller
         ///     Initializes the game working with appropriate classes to place frog
         ///     and vehicle on game screen.
         ///     Precondition: gameCanvas != null
-        ///     Postcondition: Game is initialized and ready for play.
+        ///     Post condition: Game is initialized and ready for play.
         /// </summary>
         /// <exception cref="ArgumentNullException">gameCanvas</exception>
         public void InitializeGame()
@@ -137,8 +141,7 @@ namespace Frogger.Controller
         /// </summary>
         public void ResetGame()
         {
-            this.gameTimer.Stop();
-            this.lifeDispatcherTimer.Stop();
+            this.stopAllTimers();
 
             this.laneManager.ClearLanesAndVehicles(this.GameCanvas);
 
@@ -146,10 +149,24 @@ namespace Frogger.Controller
 
             this.resetGameStats();
 
-            this.gameTimer.Start();
-            this.lifeDispatcherTimer.Start();
+            this.startAllTimers();
 
             this.configureLevelParameters();
+        }
+
+        private void startAllTimers()
+        {
+            if (!this.isGameOver)
+            {
+                this.gameTimer.Start();
+                this.lifeDispatcherTimer.Start();
+            }
+        }
+
+        private void stopAllTimers()
+        {
+            this.gameTimer.Stop();
+            this.lifeDispatcherTimer.Stop();
         }
 
         private void startGameAfterDeathAnimation(object sender, EventArgs e)
@@ -211,7 +228,27 @@ namespace Frogger.Controller
             {
                 this.checkCollisionWithMushroom();
                 this.moveVehicle();
+                this.waterCrossingManager.MovePlanks();
+                this.playerCanLandInPlank();
                 this.updateScore();
+            }
+        }
+
+        private async void playerCanLandInPlank()
+        {
+            var player = this.PlayerManager.Player;
+            var (canLand, plank) = this.waterCrossingManager.CanPlayerLand(player);
+
+            if (canLand)
+            {
+                player.X = plank.X;
+            }
+            else
+            {
+                if (player.Y < GameConstants.WaterCrossingBottomY && player.Y > GameConstants.WaterCrossingTopY)
+                {
+                    await this.handleDeath();
+                }
             }
         }
 
@@ -252,21 +289,6 @@ namespace Frogger.Controller
 
                     break;
             }
-        }
-
-        private void startAllTimers()
-        {
-            if (!this.isGameOver)
-            {
-                this.gameTimer.Start();
-                this.lifeDispatcherTimer.Start();
-            }
-        }
-
-        private void stopAllTimers()
-        {
-            this.gameTimer.Stop();
-            this.lifeDispatcherTimer.Stop();
         }
 
         private void checkCollisionWithMushroom()
@@ -326,11 +348,15 @@ namespace Frogger.Controller
 
         private async void handleCollision()
         {
+            await this.handleDeath();
+        }
+
+        private async Task handleDeath()
+        {
+            this.TimeCountDown = LandHomeIn;
             this.PlayerManager.HandleDeath();
             await this.soundEffects.DyingSound();
-            this.Lives--;
             this.onLivesUpdated();
-            this.TimeCountDown = LandHomeIn;
         }
 
         private void updateScore()
@@ -364,12 +390,9 @@ namespace Frogger.Controller
             }
         }
 
-        private void handleDintLandingHome()
+        private async void handleDintLandingHome()
         {
-            this.TimeCountDown = LandHomeIn;
-            this.Lives--;
-            this.onLivesUpdated();
-            this.PlayerManager.SetPlayerToCenterOfBottomShoulder();
+            await this.handleDeath();
         }
 
         private async void handleLandingHome()
@@ -444,10 +467,7 @@ namespace Frogger.Controller
             this.TimeOut?.Invoke(this, EventArgs.Empty);
             if (this.TimeCountDown == 0)
             {
-                this.TimeCountDown = LandHomeIn;
-                this.Lives--;
-                this.onLivesUpdated();
-                await this.soundEffects.DyingSound();
+                await this.handleDeath();
                 this.lifeDispatcherTimer.Start();
             }
 
