@@ -88,20 +88,6 @@ namespace Frogger.Controller
 
         #endregion
 
-        #region Event Handlers
-
-        /// <summary>
-        ///     Occurs when [death animation started].
-        /// </summary>
-        public event EventHandler AnimationStarted;
-
-        /// <summary>
-        ///     Occurs when [death animation is over].
-        /// </summary>
-        public event EventHandler AnimationOver;
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -152,7 +138,7 @@ namespace Frogger.Controller
         private void updateAnimationFrame(IList<BaseSprite> frames, DispatcherTimer timer, Action finishAction)
         {
             this.Player.Sprite.Opacity = 0;
-            
+
             if (this.currentFrame < frames.Count)
             {
                 if (this.currentFrame > 0)
@@ -270,6 +256,20 @@ namespace Frogger.Controller
             };
             this.movementAnimationTimer.Tick += this.movementAnimationTimerOnTick;
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        /// <summary>
+        ///     Occurs when [death animation started].
+        /// </summary>
+        public event EventHandler AnimationStarted;
+
+        /// <summary>
+        ///     Occurs when [death animation is over].
+        /// </summary>
+        public event EventHandler AnimationOver;
 
         #endregion
 

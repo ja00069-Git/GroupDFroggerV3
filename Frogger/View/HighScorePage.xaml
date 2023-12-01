@@ -16,13 +16,13 @@
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="{StaticResource AppWidth}"
         Height="{StaticResource AppHeight}">
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter your name:"
-                   VerticalAlignment="Top" Canvas.Left="49" Canvas.Top="31" />
+                   VerticalAlignment="Top" Canvas.Left="33" Canvas.Top="82" />
 
         <ListView
             ItemsSource="{Binding Path= HighScores, Mode=TwoWay}"
             SelectedItem="{Binding Path=SelectedHighScore, Mode=TwoWay}"
             BorderBrush="Black" BorderThickness="2" x:Name="rosterListView" HorizontalAlignment="Left" Height="296"
-            VerticalAlignment="Top" Width="332" Canvas.Left="269" Canvas.Top="28">
+            VerticalAlignment="Top" Width="332" Canvas.Left="213" Canvas.Top="106">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">
@@ -42,21 +42,25 @@
 
         </ListView>
         <Button x:Name="submitBtn" Command="{Binding AddCommand, Mode=TwoWay}" Content="Add Score"
-                VerticalAlignment="Top" Width="133" Canvas.Left="47" Canvas.Top="103" />
-        <TextBox x:Name="playerName" Text="{Binding PlayerName, Mode=TwoWay}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Canvas.Left="49" Canvas.Top="55" />
+                VerticalAlignment="Top" Width="133" Canvas.Left="31" Canvas.Top="154" />
+        <TextBox x:Name="playerName" Text="{Binding PlayerName, Mode=TwoWay}" HorizontalAlignment="Left"
+                 TextWrapping="Wrap" VerticalAlignment="Top" Width="133" Canvas.Left="33" Canvas.Top="106" />
         <Button Command="{Binding RemoveCommand, Mode=TwoWay}" Content="Delete"
-                VerticalAlignment="Top" Width="129" Canvas.Left="47" Canvas.Top="155" HorizontalAlignment="Center" />
-        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Width="129" Canvas.Left="49"
-                Canvas.Top="209" />
+                VerticalAlignment="Top" Width="129" Canvas.Left="31" Canvas.Top="206" />
+        <Button Content="Sort by name" Command="{Binding SortByNameCommand, Mode=TwoWay}" Width="129" Canvas.Left="33"
+                Canvas.Top="260" VerticalAlignment="Top" />
         <Button Content="Sort by score" Command="{Binding SortByScoreCommand, Mode=TwoWay}"
-                VerticalAlignment="Top" Width="129" Canvas.Left="47" Canvas.Top="265" />
+                VerticalAlignment="Top" Width="129" Canvas.Left="31" Canvas.Top="316" />
         <Button Content="Sort by Level" Command="{Binding SortByLevelCommand, Mode=TwoWay}"
-                VerticalAlignment="Top" Width="129" Canvas.Left="47" Canvas.Top="325" />
+                VerticalAlignment="Top" Width="129" Canvas.Left="31" Canvas.Top="376" />
         <Button Content="Edit Name" Command="{Binding EditNameCommand, Mode=TwoWay}"
-                VerticalAlignment="Top" Width="129" Canvas.Left="47" Canvas.Top="391" />
-        <Button Content="Play Again" Command="{Binding PlayAgainCommand, Mode=TwoWay}" Width="129" Canvas.Left="356" Canvas.Top="391" />
-        <Button Content="Start Screen" Command="{Binding StartScreenCommand, Mode=TwoWay}" Width="129" Canvas.Left="511" Canvas.Top="391" />
-        <Button Content="Clear Board" Command="{Binding ClearBoardCommand, Mode=TwoWay}" Width="129" Canvas.Left="207" Canvas.Top="391" />
+                VerticalAlignment="Top" Width="129" Canvas.Left="31" Canvas.Top="442" />
+        <Button Content="Play Again" Command="{Binding PlayAgainCommand, Mode=TwoWay}" Width="129" Canvas.Left="340"
+                Canvas.Top="442" VerticalAlignment="Top" />
+        <Button Content="Start Screen" Command="{Binding StartScreenCommand, Mode=TwoWay}" Width="129"
+                Canvas.Left="495" Canvas.Top="442" VerticalAlignment="Top" />
+        <Button Content="Clear Board" Command="{Binding ClearBoardCommand, Mode=TwoWay}" Width="129" Canvas.Left="191"
+                Canvas.Top="442" VerticalAlignment="Top" />
     </Canvas>
 
 </Page>

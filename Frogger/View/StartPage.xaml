@@ -12,11 +12,14 @@
 
     <Canvas Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" Background="Transparent">
 
-        <Image Source="Images/start_screen.png" Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}"/>
+        <Image Source="Images/start_screen.png" Width="{StaticResource AppWidth}" Height="{StaticResource AppHeight}" />
 
-        <Button Content="" Canvas.Left="230" Canvas.Top="265" Background="Transparent"
-                Click="startGameButtonClick" Width="174" Height="35" VerticalAlignment="Top" />
-        <Button Content="" Canvas.Left="230" Canvas.Top="305" Background="Transparent"
-                Click="scoreBoardButtonClick" Width="174" HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" />
+        <Button Content="" Canvas.Left="230" Canvas.Top="320" Background="Transparent"
+                Click="startGameButtonClick" Width="174" Height="35" VerticalAlignment="Top"
+                HorizontalAlignment="Center" />
+
+        <Button Content="" Canvas.Left="230" Canvas.Top="360" Background="Transparent"
+                Click="scoreBoardButtonClick" Width="174" HorizontalAlignment="Center" Height="30"
+                VerticalAlignment="Top" />
     </Canvas>
 </Page>

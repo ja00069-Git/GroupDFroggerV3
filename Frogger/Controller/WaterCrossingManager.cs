@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using Windows.UI.Xaml;
+﻿using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using Frogger.Model;
+using Frogger.Util;
 
 namespace Frogger.Controller
 {
@@ -12,92 +13,71 @@ namespace Frogger.Controller
     {
         #region Data members
 
-        private const int PlankGap = 150;
-        private const int InitialPlankX = 30;
-        private readonly IList<Plank> planks;
         private readonly Canvas gameCanvas;
-        private int nextPlankX = InitialPlankX;
-
-        #endregion
-
-        #region Properties
-
-
-        /// <summary>Gets the water crossing.</summary>
-        /// <value>The water crossing.</value>
-        public WaterCrossing WaterCrossing { get; }
+        private readonly List<WaterCrossing> waterCrossings;
+        private readonly Random random;
 
         #endregion
 
         #region Constructors
 
+
         /// <summary>Initializes a new instance of the <see cref="WaterCrossingManager" /> class.</summary>
         /// <param name="gameCanvas">The game canvas.</param>
         public WaterCrossingManager(Canvas gameCanvas)
         {
-            this.WaterCrossing = new WaterCrossing();
             this.gameCanvas = gameCanvas;
-            this.gameCanvas.Children.Add(this.WaterCrossing.Sprite);
-
-            this.planks = new List<Plank>
-            {
-                new Plank(),
-                new Plank()
-            };
-
-            this.placePlanks();
+            this.waterCrossings = new List<WaterCrossing>();
+            this.random = new Random();
+            this.initializeWaterCrossings();
+            this.addPlanksToWaterCrossings();
         }
 
         #endregion
 
         #region Methods
 
-        private void placePlanks()
-        {
-            foreach (var plank in this.planks)
-            {
-                this.gameCanvas.Children.Add(plank.Sprite);
-                plank.Y = this.WaterCrossing.Y;
-                plank.SetSpeed(1, 0);
-                this.positionPlanks(plank);
-            }
-        }
-
-        private void positionPlanks(Plank plank)
-        {
-            plank.X = this.nextPlankX;
-            this.nextPlankX += PlankGap;
-        }
-
-        /// <summary>Moves the planks to the right.</summary>
+        /// <summary>Moves the planks.</summary>
         public void MovePlanks()
         {
-            foreach (var plank in this.planks)
+            foreach (var waterCrossing in this.waterCrossings)
             {
-                plank.MoveRight();
-                if (plank.X > (double)Application.Current.Resources["AppWidth"])
-                {
-                    plank.X = 0 - plank.Width;
-                }
+                waterCrossing.MovePlanks();
             }
         }
 
-        public (bool, double) CanPlayerLand(GameObject player)
+        /// <summary>Initializes the water crossings.</summary>
+        private void initializeWaterCrossings()
         {
-            var canLand = (false, 0.0);
-
-            foreach (var plank in this.planks)
+            double yPosition = GameConstants.PlayableTopY;
+            foreach (var direction in new[] { Direction.Right, Direction.Left, Direction.Right })
             {
-                if (plank.CheckCollision(player))
-                {
-                    canLand = (true, plank.X);
-                    return canLand;
-                }
-
-                canLand = (false, player.X);
+                var crossing = new WaterCrossing(direction) { Y = yPosition };
+                yPosition += GameConstants.LaneWidth;
+                this.gameCanvas.Children.Add(crossing.Sprite);
+                this.waterCrossings.Add(crossing);
             }
+        }
 
-            return canLand;
+
+        /// <summary>Adds the planks to water crossings.</summary>
+        private void addPlanksToWaterCrossings()
+        {
+            const int numberOfPlanks = 5;
+            const int minGap = 70;
+
+            foreach (var waterCrossing in this.waterCrossings)
+            {
+                var lastPlankEndX = 0;
+                for (var i = 0; i < numberOfPlanks; i++)
+                {
+                    var plank = new Plank { Y = waterCrossing.Y, X = lastPlankEndX + minGap};
+                    waterCrossing.AddPlank(plank);
+                    this.gameCanvas.Children.Add(plank.Sprite);
+
+                    lastPlankEndX = (int)(plank.X + plank.Width);
+                }
+            }
         }
 
         #endregion

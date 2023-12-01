@@ -39,11 +39,11 @@
                    HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="246" Canvas.Top="205" />
 
         <!-- Life timer TextBlock -->
-        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="469" HorizontalAlignment="Left" VerticalAlignment="Top"
-                   Canvas.Left="8" />
-        <TextBlock x:Name="timerTexBlock" Canvas.Left="70" Text="20" FontSize="20" Canvas.Top="469"
+        <TextBlock Text="Timer: " FontSize="20" Canvas.Top="563" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Canvas.Left="28" />
+        <TextBlock x:Name="timerTexBlock" Canvas.Left="90" Text="20" FontSize="20" Canvas.Top="563"
                    HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.621,0.747" />
-        <Button Content="Reset Game" Canvas.Left="281" Canvas.Top="466" VerticalAlignment="Top" Background="Gray"
-                Click="playAgainButtonClick" HorizontalAlignment="Center" />
+        <Button Content="Reset Game" FontSize="12" Canvas.Left="279" Canvas.Top="563" Background="Gray"
+                Click="playAgainButtonClick" Height="29" Width="95" VerticalAlignment="Top" />
     </Canvas>
 </Page>

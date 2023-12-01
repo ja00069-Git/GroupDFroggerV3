@@ -131,6 +131,7 @@
     <Compile Include="Model\BonusTimePowerUp.cs" />
     <Compile Include="Model\Plank.cs" />
     <Compile Include="Model\WaterCrossing.cs" />
+    <Compile Include="Util\GameConstants.cs" />
     <Compile Include="ViewModel\HighScoreViewModel.cs" />
     <Compile Include="Controller\LaneManager.cs" />
     <Compile Include="Controller\PlayerManager.cs" />

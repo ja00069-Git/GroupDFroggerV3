@@ -235,7 +235,7 @@ namespace Frogger.Controller
 
         private void playerCanLandInPlank()
         {
-            var canLand = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item1;
+            /*var canLand = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item1;
             var plankLandedOn = this.waterCrossingManager.CanPlayerLand(this.PlayerManager.Player).Item2;
 
             switch (canLand)
@@ -245,7 +245,7 @@ namespace Frogger.Controller
                     break;
                 case false:
                     break;
-            }
+            }*/
         }
 
         private void configureLevelParameters()
